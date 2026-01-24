@@ -6,10 +6,165 @@
 
 generator client {
   provider     = "prisma-client"
-  output       = "../generated/prisma"
+  output       = "../src/generated/prisma"
   moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+enum UserRole {
+  admin
+  teacher
+  student
+}
+
+enum CourseStatus {
+  active
+  inactive
+  draft
+}
+
+enum SectionStatus {
+  active
+  inactive
+}
+
+enum LessonStatus {
+  active
+  inactive
+}
+
+enum LessonType {
+  video
+  document
+  quiz
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  refreshToken RefreshToken?
+  student      Student?
+  teacher      Teacher?
+  admin        Admin?
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Student {
+  id Int @id @default(autoincrement())
+
+  user        User         @relation(fields: [id], references: [id])
+  enrollments Enrollment[]
+}
+
+model Teacher {
+  id Int @id @default(autoincrement())
+
+  user    User     @relation(fields: [id], references: [id])
+  courses Course[]
+}
+
+model Admin {
+  id Int @id @default(autoincrement())
+
+  user       User       @relation(fields: [id], references: [id])
+  categories Category[]
+}
+
+model Category {
+  id          Int     @id @default(autoincrement())
+  creatorId   Int
+  name        String
+  description String?
+
+  admin   Admin    @relation(fields: [creatorId], references: [id])
+  courses Course[]
+}
+
+model Course {
+  id           Int          @id @default(autoincrement())
+  instructorId Int
+  categoryId   Int
+  title        String
+  description  String       @db.Text
+  thumbnailUrl String
+  status       CourseStatus @default(draft)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  instructor  Teacher      @relation(fields: [instructorId], references: [id])
+  category    Category     @relation(fields: [categoryId], references: [id])
+  sections    Section[]
+  enrollments Enrollment[]
+}
+
+model Section {
+  id         Int           @id @default(autoincrement())
+  courseId   Int
+  title      String
+  orderIndex Int
+  status     SectionStatus @default(active)
+
+  course  Course   @relation(fields: [courseId], references: [id])
+  lessons Lesson[]
+}
+
+model Lesson {
+  id         Int          @id @default(autoincrement())
+  sectionId  Int
+  title      String
+  contentUrl String
+  lessonType LessonType
+  orderIndex Int
+  status     LessonStatus @default(active)
+
+  section         Section          @relation(fields: [sectionId], references: [id])
+  lessonResources LessonResource[]
+}
+
+model Resource {
+  id        Int      @id @default(autoincrement())
+  title     String
+  fileUrl   String
+  fileType  String
+  createdAt DateTime @default(now())
+
+  lessonResources LessonResource[]
+}
+
+model LessonResource {
+  lessonId   Int
+  resourceId Int
+
+  lesson   Lesson   @relation(fields: [lessonId], references: [id])
+  resource Resource @relation(fields: [resourceId], references: [id])
+
+  @@id([lessonId, resourceId])
+}
+
+model Enrollment {
+  userId     Int
+  courseId   Int
+  enrolledAt DateTime @default(now())
+
+  student Student @relation(fields: [userId], references: [id])
+  course  Course  @relation(fields: [courseId], references: [id])
+
+  @@id([userId, courseId])
 }

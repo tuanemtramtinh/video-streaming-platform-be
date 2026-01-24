@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from 'src/routes/auth/auth.service';
 import { ConfigSchema } from 'src/config/env.schema';
 import { PrismaService } from 'src/shared/services/prisma.service';
 
