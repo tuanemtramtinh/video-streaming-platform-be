@@ -11,6 +11,8 @@ import { SectionsModule } from './routes/sections/sections.module';
 import { LessonsModule } from './routes/lessons/lessons.module';
 import { ResourcesModule } from './routes/resources/resources.module';
 import { CategoriesModule } from './routes/categories/categories.module';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod';
 
 @Module({
   imports: [
@@ -30,6 +32,16 @@ import { CategoriesModule } from './routes/categories/categories.module';
     CategoriesModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useClass: ZodValidationPipe,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ZodSerializerInterceptor,
+    },
+  ],
 })
 export class AppModule {}

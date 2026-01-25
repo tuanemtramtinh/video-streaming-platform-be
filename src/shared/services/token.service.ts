@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
-import { ConfigSchema } from 'src/config/env.schema';
+import { Config } from 'src/config/env.schema';
 import { TokenPayload } from 'src/shared/types/jwt.type';
 
 @Injectable()
 export class TokenService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService<ConfigSchema>,
+    private readonly configService: ConfigService<Config>,
   ) {}
 
   signAccessToken(payload: { userId: number }): Promise<string> {

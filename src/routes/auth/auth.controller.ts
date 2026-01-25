@@ -1,14 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AuthService } from 'src/routes/auth/auth.service';
-import { ConfigSchema } from 'src/config/env.schema';
+import { Config } from 'src/config/env.schema';
 import { PrismaService } from 'src/shared/services/prisma.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly configService: ConfigService<ConfigSchema>,
+    private readonly configService: ConfigService<Config>,
     private readonly prismaService: PrismaService,
   ) {}
 

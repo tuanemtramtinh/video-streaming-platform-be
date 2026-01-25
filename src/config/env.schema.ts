@@ -1,21 +1,12 @@
-import { IsNumber, IsString } from 'class-validator';
+import z from 'zod';
 
-export class ConfigSchema {
-  @IsString()
-  DATABASE_URL: string;
+export const ConfigSchema = z.object({
+  DATABASE_URL: z.string(),
+  PORT: z.string(),
+  ACCESS_TOKEN_SECRET: z.string(),
+  ACCESS_TOKEN_EXPIRES_IN: z.string(),
+  REFRESH_TOKEN_SECRET: z.string(),
+  REFRESH_TOKEN_EXPIRES_IN: z.string(),
+});
 
-  @IsNumber()
-  PORT: number;
-
-  @IsString()
-  ACCESS_TOKEN_SECRET: string;
-
-  @IsString()
-  ACCESS_TOKEN_EXPIRES_IN: string;
-
-  @IsString()
-  REFRESH_TOKEN_SECRET: string;
-
-  @IsString()
-  REFRESH_TOKEN_EXPIRES_IN: string;
-}
+export type Config = z.infer<typeof ConfigSchema>;
