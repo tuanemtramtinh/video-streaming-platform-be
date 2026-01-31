@@ -1,0 +1,36 @@
+name: Check Jira Ticket in Commit
+
+on:
+  # Kích hoạt khi có push lên BẤT KỲ branch nào
+  push:
+  # Kích hoạt khi có pull request vào BẤT KỲ branch nào
+  pull_request:
+
+jobs:
+  check-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate Commit Message
+        run: |
+          JIRA_REGEX="[A-Z0-9]+-[0-9]+"
+
+          # Nếu là sự kiện Pull Request, chúng ta nên kiểm tra commit head của PR
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            COMMIT_MSG=$(git log -1 --pretty=%B ${{ github.event.pull_request.head.sha }})
+          else
+            COMMIT_MSG=$(git log -1 --pretty=%B)
+          fi
+
+          echo "Checking commit message: $COMMIT_MSG"
+
+          if [[ ! $COMMIT_MSG =~ $JIRA_REGEX ]]; then
+            echo "::error::Commit message thiếu Jira Ticket Key (VD: PROJ-123: nội dung commit)"
+            exit 1
+          else
+            echo "Jira Ticket Key hợp lệ!"
+          fi
