@@ -1,0 +1,16 @@
+#!/bin/sh
+
+COMMIT_MSG_FILE=$1
+commit_msg=$(cat "$COMMIT_MSG_FILE")
+JIRA_REGEX="[A-Z0-9]+-[0-9]+"
+
+if ! echo "$commit_msg" | grep -qE "$JIRA_REGEX"; then
+  # Dùng nhiều lệnh echo thay vì dùng \n sẽ an toàn cho mọi hệ điều hành
+  echo ""
+  echo "❌ [ERROR] Wrong commit message format!"
+  echo "-------------------------------------------------------"
+  echo "Jira Key required. Example: 'QLDAPM-01: fix bug login'"
+  echo "-------------------------------------------------------"
+  echo ""
+  exit 1
+fi
