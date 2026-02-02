@@ -17,3 +17,4 @@ export class AuthController {
     return this.configService.get('ACCESS_TOKEN_EXPIRES_IN', { infer: true });
   }
 }
+hehe
