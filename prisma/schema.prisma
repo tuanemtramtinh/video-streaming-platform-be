@@ -14,11 +14,11 @@ datasource db {
   provider = "postgresql"
 }
 
-enum UserRole {
-  admin
-  teacher
-  student
-}
+// enum UserRole {
+//   admin
+//   teacher
+//   student
+// }
 
 enum CourseStatus {
   active
@@ -52,9 +52,30 @@ model User {
   updatedAt DateTime @updatedAt
 
   refreshToken RefreshToken?
-  student      Student?
-  teacher      Teacher?
-  admin        Admin?
+  // student      Student?
+  // teacher      Teacher?
+  // admin        Admin?
+  roles        UserRole[]
+  enrollments  Enrollment[]
+  categories   Category[]
+  courses      Course[]
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  users UserRole[]
+}
+
+model UserRole {
+  userId Int
+  roleId Int
+
+  user User @relation(fields: [userId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
+
+  @@id([userId, roleId])
 }
 
 model RefreshToken {
@@ -67,26 +88,26 @@ model RefreshToken {
   user User @relation(fields: [userId], references: [id])
 }
 
-model Student {
-  id Int @id @default(autoincrement())
+// model Student {
+//   id Int @id @default(autoincrement())
 
-  user        User         @relation(fields: [id], references: [id])
-  enrollments Enrollment[]
-}
+//   user        User         @relation(fields: [id], references: [id])
+//   enrollments Enrollment[]
+// }
 
-model Teacher {
-  id Int @id @default(autoincrement())
+// model Teacher {
+//   id Int @id @default(autoincrement())
 
-  user    User     @relation(fields: [id], references: [id])
-  courses Course[]
-}
+//   user    User     @relation(fields: [id], references: [id])
+//   courses Course[]
+// }
 
-model Admin {
-  id Int @id @default(autoincrement())
+// model Admin {
+//   id Int @id @default(autoincrement())
 
-  user       User       @relation(fields: [id], references: [id])
-  categories Category[]
-}
+//   user       User       @relation(fields: [id], references: [id])
+//   categories Category[]
+// }
 
 model Category {
   id          Int     @id @default(autoincrement())
@@ -94,7 +115,8 @@ model Category {
   name        String
   description String?
 
-  admin   Admin    @relation(fields: [creatorId], references: [id])
+  // admin     Admin @relation(fields: [creatorId], references: [id])
+  creator User     @relation(fields: [creatorId], references: [id])
   courses Course[]
 }
 
@@ -109,7 +131,8 @@ model Course {
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
-  instructor  Teacher      @relation(fields: [instructorId], references: [id])
+  // instructor  Teacher      @relation(fields: [instructorId], references: [id])
+  instructor  User         @relation(fields: [instructorId], references: [id])
   category    Category     @relation(fields: [categoryId], references: [id])
   sections    Section[]
   enrollments Enrollment[]
@@ -164,8 +187,9 @@ model Enrollment {
   courseId   Int
   enrolledAt DateTime @default(now())
 
-  student Student @relation(fields: [userId], references: [id])
-  course  Course  @relation(fields: [courseId], references: [id])
+  // student Student @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
 
   @@id([userId, courseId])
 }

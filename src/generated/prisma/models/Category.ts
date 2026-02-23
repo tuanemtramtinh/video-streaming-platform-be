@@ -212,7 +212,7 @@ export type CategoryWhereInput = {
   creatorId?: Prisma.IntFilter<"Category"> | number
   name?: Prisma.StringFilter<"Category"> | string
   description?: Prisma.StringNullableFilter<"Category"> | string | null
-  admin?: Prisma.XOR<Prisma.AdminScalarRelationFilter, Prisma.AdminWhereInput>
+  creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   courses?: Prisma.CourseListRelationFilter
 }
 
@@ -221,7 +221,7 @@ export type CategoryOrderByWithRelationInput = {
   creatorId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  admin?: Prisma.AdminOrderByWithRelationInput
+  creator?: Prisma.UserOrderByWithRelationInput
   courses?: Prisma.CourseOrderByRelationAggregateInput
 }
 
@@ -233,7 +233,7 @@ export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   creatorId?: Prisma.IntFilter<"Category"> | number
   name?: Prisma.StringFilter<"Category"> | string
   description?: Prisma.StringNullableFilter<"Category"> | string | null
-  admin?: Prisma.XOR<Prisma.AdminScalarRelationFilter, Prisma.AdminWhereInput>
+  creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   courses?: Prisma.CourseListRelationFilter
 }, "id">
 
@@ -262,7 +262,7 @@ export type CategoryScalarWhereWithAggregatesInput = {
 export type CategoryCreateInput = {
   name: string
   description?: string | null
-  admin: Prisma.AdminCreateNestedOneWithoutCategoriesInput
+  creator: Prisma.UserCreateNestedOneWithoutCategoriesInput
   courses?: Prisma.CourseCreateNestedManyWithoutCategoryInput
 }
 
@@ -277,7 +277,7 @@ export type CategoryUncheckedCreateInput = {
 export type CategoryUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  admin?: Prisma.AdminUpdateOneRequiredWithoutCategoriesNestedInput
+  creator?: Prisma.UserUpdateOneRequiredWithoutCategoriesNestedInput
   courses?: Prisma.CourseUpdateManyWithoutCategoryNestedInput
 }
 
@@ -354,45 +354,45 @@ export type CategoryScalarRelationFilter = {
   isNot?: Prisma.CategoryWhereInput
 }
 
-export type CategoryCreateNestedManyWithoutAdminInput = {
-  create?: Prisma.XOR<Prisma.CategoryCreateWithoutAdminInput, Prisma.CategoryUncheckedCreateWithoutAdminInput> | Prisma.CategoryCreateWithoutAdminInput[] | Prisma.CategoryUncheckedCreateWithoutAdminInput[]
-  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutAdminInput | Prisma.CategoryCreateOrConnectWithoutAdminInput[]
-  createMany?: Prisma.CategoryCreateManyAdminInputEnvelope
+export type CategoryCreateNestedManyWithoutCreatorInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutCreatorInput, Prisma.CategoryUncheckedCreateWithoutCreatorInput> | Prisma.CategoryCreateWithoutCreatorInput[] | Prisma.CategoryUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutCreatorInput | Prisma.CategoryCreateOrConnectWithoutCreatorInput[]
+  createMany?: Prisma.CategoryCreateManyCreatorInputEnvelope
   connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
 }
 
-export type CategoryUncheckedCreateNestedManyWithoutAdminInput = {
-  create?: Prisma.XOR<Prisma.CategoryCreateWithoutAdminInput, Prisma.CategoryUncheckedCreateWithoutAdminInput> | Prisma.CategoryCreateWithoutAdminInput[] | Prisma.CategoryUncheckedCreateWithoutAdminInput[]
-  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutAdminInput | Prisma.CategoryCreateOrConnectWithoutAdminInput[]
-  createMany?: Prisma.CategoryCreateManyAdminInputEnvelope
+export type CategoryUncheckedCreateNestedManyWithoutCreatorInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutCreatorInput, Prisma.CategoryUncheckedCreateWithoutCreatorInput> | Prisma.CategoryCreateWithoutCreatorInput[] | Prisma.CategoryUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutCreatorInput | Prisma.CategoryCreateOrConnectWithoutCreatorInput[]
+  createMany?: Prisma.CategoryCreateManyCreatorInputEnvelope
   connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
 }
 
-export type CategoryUpdateManyWithoutAdminNestedInput = {
-  create?: Prisma.XOR<Prisma.CategoryCreateWithoutAdminInput, Prisma.CategoryUncheckedCreateWithoutAdminInput> | Prisma.CategoryCreateWithoutAdminInput[] | Prisma.CategoryUncheckedCreateWithoutAdminInput[]
-  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutAdminInput | Prisma.CategoryCreateOrConnectWithoutAdminInput[]
-  upsert?: Prisma.CategoryUpsertWithWhereUniqueWithoutAdminInput | Prisma.CategoryUpsertWithWhereUniqueWithoutAdminInput[]
-  createMany?: Prisma.CategoryCreateManyAdminInputEnvelope
+export type CategoryUpdateManyWithoutCreatorNestedInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutCreatorInput, Prisma.CategoryUncheckedCreateWithoutCreatorInput> | Prisma.CategoryCreateWithoutCreatorInput[] | Prisma.CategoryUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutCreatorInput | Prisma.CategoryCreateOrConnectWithoutCreatorInput[]
+  upsert?: Prisma.CategoryUpsertWithWhereUniqueWithoutCreatorInput | Prisma.CategoryUpsertWithWhereUniqueWithoutCreatorInput[]
+  createMany?: Prisma.CategoryCreateManyCreatorInputEnvelope
   set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
   disconnect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
   delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
   connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
-  update?: Prisma.CategoryUpdateWithWhereUniqueWithoutAdminInput | Prisma.CategoryUpdateWithWhereUniqueWithoutAdminInput[]
-  updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutAdminInput | Prisma.CategoryUpdateManyWithWhereWithoutAdminInput[]
+  update?: Prisma.CategoryUpdateWithWhereUniqueWithoutCreatorInput | Prisma.CategoryUpdateWithWhereUniqueWithoutCreatorInput[]
+  updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutCreatorInput | Prisma.CategoryUpdateManyWithWhereWithoutCreatorInput[]
   deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
 }
 
-export type CategoryUncheckedUpdateManyWithoutAdminNestedInput = {
-  create?: Prisma.XOR<Prisma.CategoryCreateWithoutAdminInput, Prisma.CategoryUncheckedCreateWithoutAdminInput> | Prisma.CategoryCreateWithoutAdminInput[] | Prisma.CategoryUncheckedCreateWithoutAdminInput[]
-  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutAdminInput | Prisma.CategoryCreateOrConnectWithoutAdminInput[]
-  upsert?: Prisma.CategoryUpsertWithWhereUniqueWithoutAdminInput | Prisma.CategoryUpsertWithWhereUniqueWithoutAdminInput[]
-  createMany?: Prisma.CategoryCreateManyAdminInputEnvelope
+export type CategoryUncheckedUpdateManyWithoutCreatorNestedInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutCreatorInput, Prisma.CategoryUncheckedCreateWithoutCreatorInput> | Prisma.CategoryCreateWithoutCreatorInput[] | Prisma.CategoryUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutCreatorInput | Prisma.CategoryCreateOrConnectWithoutCreatorInput[]
+  upsert?: Prisma.CategoryUpsertWithWhereUniqueWithoutCreatorInput | Prisma.CategoryUpsertWithWhereUniqueWithoutCreatorInput[]
+  createMany?: Prisma.CategoryCreateManyCreatorInputEnvelope
   set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
   disconnect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
   delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
   connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
-  update?: Prisma.CategoryUpdateWithWhereUniqueWithoutAdminInput | Prisma.CategoryUpdateWithWhereUniqueWithoutAdminInput[]
-  updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutAdminInput | Prisma.CategoryUpdateManyWithWhereWithoutAdminInput[]
+  update?: Prisma.CategoryUpdateWithWhereUniqueWithoutCreatorInput | Prisma.CategoryUpdateWithWhereUniqueWithoutCreatorInput[]
+  updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutCreatorInput | Prisma.CategoryUpdateManyWithWhereWithoutCreatorInput[]
   deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
 }
 
@@ -414,43 +414,43 @@ export type CategoryUpdateOneRequiredWithoutCoursesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CategoryUpdateToOneWithWhereWithoutCoursesInput, Prisma.CategoryUpdateWithoutCoursesInput>, Prisma.CategoryUncheckedUpdateWithoutCoursesInput>
 }
 
-export type CategoryCreateWithoutAdminInput = {
+export type CategoryCreateWithoutCreatorInput = {
   name: string
   description?: string | null
   courses?: Prisma.CourseCreateNestedManyWithoutCategoryInput
 }
 
-export type CategoryUncheckedCreateWithoutAdminInput = {
+export type CategoryUncheckedCreateWithoutCreatorInput = {
   id?: number
   name: string
   description?: string | null
   courses?: Prisma.CourseUncheckedCreateNestedManyWithoutCategoryInput
 }
 
-export type CategoryCreateOrConnectWithoutAdminInput = {
+export type CategoryCreateOrConnectWithoutCreatorInput = {
   where: Prisma.CategoryWhereUniqueInput
-  create: Prisma.XOR<Prisma.CategoryCreateWithoutAdminInput, Prisma.CategoryUncheckedCreateWithoutAdminInput>
+  create: Prisma.XOR<Prisma.CategoryCreateWithoutCreatorInput, Prisma.CategoryUncheckedCreateWithoutCreatorInput>
 }
 
-export type CategoryCreateManyAdminInputEnvelope = {
-  data: Prisma.CategoryCreateManyAdminInput | Prisma.CategoryCreateManyAdminInput[]
+export type CategoryCreateManyCreatorInputEnvelope = {
+  data: Prisma.CategoryCreateManyCreatorInput | Prisma.CategoryCreateManyCreatorInput[]
   skipDuplicates?: boolean
 }
 
-export type CategoryUpsertWithWhereUniqueWithoutAdminInput = {
+export type CategoryUpsertWithWhereUniqueWithoutCreatorInput = {
   where: Prisma.CategoryWhereUniqueInput
-  update: Prisma.XOR<Prisma.CategoryUpdateWithoutAdminInput, Prisma.CategoryUncheckedUpdateWithoutAdminInput>
-  create: Prisma.XOR<Prisma.CategoryCreateWithoutAdminInput, Prisma.CategoryUncheckedCreateWithoutAdminInput>
+  update: Prisma.XOR<Prisma.CategoryUpdateWithoutCreatorInput, Prisma.CategoryUncheckedUpdateWithoutCreatorInput>
+  create: Prisma.XOR<Prisma.CategoryCreateWithoutCreatorInput, Prisma.CategoryUncheckedCreateWithoutCreatorInput>
 }
 
-export type CategoryUpdateWithWhereUniqueWithoutAdminInput = {
+export type CategoryUpdateWithWhereUniqueWithoutCreatorInput = {
   where: Prisma.CategoryWhereUniqueInput
-  data: Prisma.XOR<Prisma.CategoryUpdateWithoutAdminInput, Prisma.CategoryUncheckedUpdateWithoutAdminInput>
+  data: Prisma.XOR<Prisma.CategoryUpdateWithoutCreatorInput, Prisma.CategoryUncheckedUpdateWithoutCreatorInput>
 }
 
-export type CategoryUpdateManyWithWhereWithoutAdminInput = {
+export type CategoryUpdateManyWithWhereWithoutCreatorInput = {
   where: Prisma.CategoryScalarWhereInput
-  data: Prisma.XOR<Prisma.CategoryUpdateManyMutationInput, Prisma.CategoryUncheckedUpdateManyWithoutAdminInput>
+  data: Prisma.XOR<Prisma.CategoryUpdateManyMutationInput, Prisma.CategoryUncheckedUpdateManyWithoutCreatorInput>
 }
 
 export type CategoryScalarWhereInput = {
@@ -466,7 +466,7 @@ export type CategoryScalarWhereInput = {
 export type CategoryCreateWithoutCoursesInput = {
   name: string
   description?: string | null
-  admin: Prisma.AdminCreateNestedOneWithoutCategoriesInput
+  creator: Prisma.UserCreateNestedOneWithoutCategoriesInput
 }
 
 export type CategoryUncheckedCreateWithoutCoursesInput = {
@@ -495,7 +495,7 @@ export type CategoryUpdateToOneWithWhereWithoutCoursesInput = {
 export type CategoryUpdateWithoutCoursesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  admin?: Prisma.AdminUpdateOneRequiredWithoutCategoriesNestedInput
+  creator?: Prisma.UserUpdateOneRequiredWithoutCategoriesNestedInput
 }
 
 export type CategoryUncheckedUpdateWithoutCoursesInput = {
@@ -505,26 +505,26 @@ export type CategoryUncheckedUpdateWithoutCoursesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type CategoryCreateManyAdminInput = {
+export type CategoryCreateManyCreatorInput = {
   id?: number
   name: string
   description?: string | null
 }
 
-export type CategoryUpdateWithoutAdminInput = {
+export type CategoryUpdateWithoutCreatorInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courses?: Prisma.CourseUpdateManyWithoutCategoryNestedInput
 }
 
-export type CategoryUncheckedUpdateWithoutAdminInput = {
+export type CategoryUncheckedUpdateWithoutCreatorInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courses?: Prisma.CourseUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
-export type CategoryUncheckedUpdateManyWithoutAdminInput = {
+export type CategoryUncheckedUpdateManyWithoutCreatorInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -566,7 +566,7 @@ export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   creatorId?: boolean
   name?: boolean
   description?: boolean
-  admin?: boolean | Prisma.AdminDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   courses?: boolean | Prisma.Category$coursesArgs<ExtArgs>
   _count?: boolean | Prisma.CategoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["category"]>
@@ -576,7 +576,7 @@ export type CategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   creatorId?: boolean
   name?: boolean
   description?: boolean
-  admin?: boolean | Prisma.AdminDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["category"]>
 
 export type CategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -584,7 +584,7 @@ export type CategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   creatorId?: boolean
   name?: boolean
   description?: boolean
-  admin?: boolean | Prisma.AdminDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["category"]>
 
 export type CategorySelectScalar = {
@@ -596,21 +596,21 @@ export type CategorySelectScalar = {
 
 export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "creatorId" | "name" | "description", ExtArgs["result"]["category"]>
 export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  admin?: boolean | Prisma.AdminDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   courses?: boolean | Prisma.Category$coursesArgs<ExtArgs>
   _count?: boolean | Prisma.CategoryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CategoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  admin?: boolean | Prisma.AdminDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type CategoryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  admin?: boolean | Prisma.AdminDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Category"
   objects: {
-    admin: Prisma.$AdminPayload<ExtArgs>
+    creator: Prisma.$UserPayload<ExtArgs>
     courses: Prisma.$CoursePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1012,7 +1012,7 @@ readonly fields: CategoryFieldRefs;
  */
 export interface Prisma__CategoryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  admin<T extends Prisma.AdminDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminDefaultArgs<ExtArgs>>): Prisma.Prisma__AdminClient<runtime.Types.Result.GetResult<Prisma.$AdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  creator<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   courses<T extends Prisma.Category$coursesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$coursesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.

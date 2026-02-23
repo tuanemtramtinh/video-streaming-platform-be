@@ -23,25 +23,20 @@ export * from './enums.js';
  */
 export type User = Prisma.UserModel
 /**
+ * Model Role
+ * 
+ */
+export type Role = Prisma.RoleModel
+/**
+ * Model UserRole
+ * 
+ */
+export type UserRole = Prisma.UserRoleModel
+/**
  * Model RefreshToken
  * 
  */
 export type RefreshToken = Prisma.RefreshTokenModel
-/**
- * Model Student
- * 
- */
-export type Student = Prisma.StudentModel
-/**
- * Model Teacher
- * 
- */
-export type Teacher = Prisma.TeacherModel
-/**
- * Model Admin
- * 
- */
-export type Admin = Prisma.AdminModel
 /**
  * Model Category
  * 
