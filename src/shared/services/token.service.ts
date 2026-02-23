@@ -14,7 +14,9 @@ export class TokenService {
   signAccessToken(payload: { userId: number }): Promise<string> {
     return this.jwtService.signAsync(payload, {
       secret: this.configService.get('ACCESS_TOKEN_SECRET', { infer: true }),
-      expiresIn: this.configService.get('ACCESS_TOKEN_SECRET', { infer: true }),
+      expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRES_IN', {
+        infer: true,
+      }),
       algorithm: 'HS256',
     } as JwtSignOptions);
   }
