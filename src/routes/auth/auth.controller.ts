@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AuthService } from 'src/routes/auth/auth.service';
 import { Config } from 'src/config/env.schema';
@@ -10,6 +10,7 @@ import {
 } from 'src/routes/auth/auth.dto';
 import { ZodSerializerDto } from 'nestjs-zod';
 import { RefreshTokenBodyDTO } from './auth.dto';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -18,6 +19,7 @@ export class AuthController {
     private readonly authService: AuthService,
   ) {}
 
+  @UseGuards(AuthGuard)
   @Get()
   hello() {
     return this.configService.get('ACCESS_TOKEN_EXPIRES_IN', { infer: true });

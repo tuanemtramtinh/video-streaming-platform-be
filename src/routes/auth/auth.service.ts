@@ -46,11 +46,7 @@ export class AuthService {
   }
 
   async login(req: LoginBodyDTO) {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        email: req.email,
-      },
-    });
+    const user = await this.userRepository.findUserByEmail(req.email, true);
 
     if (!user) {
       throw new UnauthorizedException('Account is not exist');
@@ -77,9 +73,11 @@ export class AuthService {
       email: user.email,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
+      roles: user.roles.map((role) => role.role.name),
     };
 
     const tokens = await this.generateTokens({ userId: user.id });
+
     return { user: userWithoutPassword, ...tokens };
   }
 

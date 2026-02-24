@@ -7,7 +7,9 @@ import { RoleTypeType } from 'src/shared/types/role.type';
 export class AuthRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(user: RegisterBodyType): Promise<Omit<UserType, 'password'>> {
+  async create(
+    user: RegisterBodyType,
+  ): Promise<Omit<UserType, 'password' | 'roles'>> {
     return this.prismaService.user.create({
       data: user,
       omit: {

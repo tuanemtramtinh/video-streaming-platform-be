@@ -11,8 +11,9 @@ import { SectionsModule } from './routes/sections/sections.module';
 import { LessonsModule } from './routes/lessons/lessons.module';
 import { ResourcesModule } from './routes/resources/resources.module';
 import { CategoriesModule } from './routes/categories/categories.module';
-import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod';
+import { HttpExceptionFilter } from 'src/shared/filters/http-exception.filter';
 
 @Module({
   imports: [
@@ -41,6 +42,10 @@ import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod';
     {
       provide: APP_INTERCEPTOR,
       useClass: ZodSerializerInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
     },
   ],
 })

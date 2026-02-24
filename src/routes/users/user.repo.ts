@@ -8,12 +8,63 @@ export class UserRepository {
 
   async findUserByEmail(
     email: string,
+    includePassword: true,
+  ): Promise<UserType | null>;
+  async findUserByEmail(
+    email: string,
+    includePassword?: false,
+  ): Promise<Omit<UserType, 'password'> | null>;
+  async findUserByEmail(
+    email: string,
+    includePassword: boolean = false,
   ): Promise<Omit<UserType, 'password'> | null> {
     return await this.prismaService.user.findUnique({
       where: { email: email },
-      omit: {
-        password: true,
+      include: {
+        roles: {
+          include: {
+            role: true,
+          },
+        },
       },
+      ...(includePassword
+        ? {}
+        : {
+            omit: {
+              password: true,
+            },
+          }),
+    });
+  }
+
+  async findUserById(
+    id: number,
+    includePassword: true,
+  ): Promise<UserType | null>;
+  async findUserById(
+    id: number,
+    includePassword?: false,
+  ): Promise<Omit<UserType, 'password'> | null>;
+  async findUserById(
+    id: number,
+    includePassword: boolean = false,
+  ): Promise<Omit<UserType, 'password'> | null> {
+    return await this.prismaService.user.findUnique({
+      where: { id: id },
+      include: {
+        roles: {
+          include: {
+            role: true,
+          },
+        },
+      },
+      ...(includePassword
+        ? {}
+        : {
+            omit: {
+              password: true,
+            },
+          }),
     });
   }
 }

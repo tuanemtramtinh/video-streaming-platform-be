@@ -51,14 +51,14 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  refreshToken RefreshToken?
+  refreshTokens RefreshToken[]
   // student      Student?
   // teacher      Teacher?
   // admin        Admin?
-  roles        UserRole[]
-  enrollments  Enrollment[]
-  categories   Category[]
-  courses      Course[]
+  roles         UserRole[]
+  enrollments   Enrollment[]
+  categories    Category[]
+  courses       Course[]
 }
 
 model Role {
@@ -80,7 +80,7 @@ model UserRole {
 
 model RefreshToken {
   id        Int      @id @default(autoincrement())
-  userId    Int      @unique
+  userId    Int
   token     String   @unique
   expiresAt DateTime
   createdAt DateTime @default(now())
