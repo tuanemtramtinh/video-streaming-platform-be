@@ -150,13 +150,14 @@ model Section {
 }
 
 model Lesson {
-  id         Int          @id @default(autoincrement())
-  sectionId  Int
-  title      String
-  contentUrl String
-  lessonType LessonType
-  orderIndex Int
-  status     LessonStatus @default(active)
+  id          Int          @id @default(autoincrement())
+  sectionId   Int
+  title       String
+  contentUrl  String
+  contentText String
+  lessonType  LessonType
+  orderIndex  Int
+  status      LessonStatus @default(active)
 
   section         Section          @relation(fields: [sectionId], references: [id])
   lessonResources LessonResource[]
