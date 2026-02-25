@@ -7,6 +7,6 @@ import { UserRepository } from 'src/routes/users/user.repo';
 @Module({
   controllers: [AuthController],
   providers: [AuthService, AuthRepository, UserRepository],
-  exports: [AuthRepository],
+  exports: [AuthRepository, UserRepository],
 })
 export class AuthModule {}
