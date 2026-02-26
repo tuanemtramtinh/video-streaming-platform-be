@@ -139,7 +139,9 @@ export const CourseScalarFieldEnum = {
   thumbnailUrl: 'thumbnailUrl',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  price: 'price',
+  discount: 'discount'
 } as const
 
 export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]

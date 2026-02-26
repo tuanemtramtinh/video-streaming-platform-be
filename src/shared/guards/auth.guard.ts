@@ -25,18 +25,24 @@ export class AuthGuard implements CanActivate {
     }
 
     const token = authHeader.split(' ')[1];
-    if (!token) {
-      throw new UnauthorizedException('No token provided');
+    try {
+      const decodedToken = await this.tokenService.verifyAccessToken(token);
+
+      const user = await this.userRepository.findUserById(decodedToken.userId);
+
+      if (!user) {
+        throw new UnauthorizedException('User is not exist');
+      }
+
+      request[REQUEST_USER_KEY] = user;
+      return true;
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (error?.name === 'TokenExpiredError') {
+        throw new UnauthorizedException('Access token expired');
+      }
+
+      throw new UnauthorizedException('Invalid access token');
     }
-    const decodedToken = await this.tokenService.verifyAccessToken(token);
-
-    const user = await this.userRepository.findUserById(decodedToken.userId);
-
-    if (!user) {
-      throw new UnauthorizedException('User is not exist');
-    }
-
-    request[REQUEST_USER_KEY] = user;
-    return true;
   }
 }

@@ -130,6 +130,8 @@ model Course {
   status       CourseStatus @default(draft)
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
+  price        Int
+  discount     Int
 
   // instructor  Teacher      @relation(fields: [instructorId], references: [id])
   instructor  User         @relation(fields: [instructorId], references: [id])

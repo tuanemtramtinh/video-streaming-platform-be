@@ -13,6 +13,8 @@ export const CourseSchema = z.object({
     .max(255, 'Title must be less than 255 characters'),
   description: z.string().min(10, 'Description must be at least 10 characters'),
   thumbnailUrl: z.string(),
+  price: z.coerce.number(),
+  discount: z.coerce.number(),
   status: CourseStatusSchema,
   createdAt: z.date(),
   updatedAt: z.date(),
@@ -29,7 +31,7 @@ export const CreateCourseSchema = CourseSchema.omit({
 })
   .extend({
     // thumbnailUrl: z.url('Invalid thumbnail url').optional(),
-    status: CourseStatusSchema.default('draft'),
+    status: CourseStatusSchema.default('active'),
   })
   .strict();
 
