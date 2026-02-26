@@ -1,9 +1,15 @@
 import { createZodDto } from 'nestjs-zod';
 import {
+    CreateCourseSchema,
+    CreateCourseResSchema,
     CourseSchema,
     DeleteCourseResSchema,
     UpdateCourseBodySchema,
 } from 'src/routes/courses/courses.model';
+
+export class CreateCourseDTO extends createZodDto(CreateCourseSchema) { }
+
+export class CreateCourseResDTO extends createZodDto(CreateCourseResSchema) { }
 
 export class CourseResDTO extends createZodDto(CourseSchema) { }
 

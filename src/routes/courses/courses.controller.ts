@@ -2,14 +2,20 @@ import {
     Body,
     Controller,
     Delete,
+    Get,
+    HttpCode,
     Param,
     ParseIntPipe,
     Patch,
+    Post,
+    Query,
     Req,
     UseGuards,
 } from '@nestjs/common';
 import { ZodSerializerDto } from 'nestjs-zod';
 import {
+    CreateCourseDTO,
+    CreateCourseResDTO,
     CourseResDTO,
     DeleteCourseResDTO,
     UpdateCourseBodyDTO,
@@ -18,6 +24,10 @@ import { CoursesService } from 'src/routes/courses/courses.service';
 import { REQUEST_USER_KEY } from 'src/shared/constants/auth.constant';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { Request } from 'express';
+import {
+    PaginationSchema,
+    type PaginationInputType,
+} from 'src/shared/models/pagination.model';
 
 type RequestWithUser = Request & {
     [REQUEST_USER_KEY]: {
@@ -30,7 +40,30 @@ export class CoursesController {
     constructor(private readonly coursesService: CoursesService) { }
 
     @UseGuards(AuthGuard)
+    @Post()
+    @HttpCode(201)
+    @ZodSerializerDto(CreateCourseResDTO)
+    createCourses(@Body() req: CreateCourseDTO, @Req() request: RequestWithUser) {
+        return this.coursesService.create(req, request[REQUEST_USER_KEY].id);
+    }
+
+    @Get()
+    @HttpCode(200)
+    getCourses(@Query() query: PaginationInputType) {
+        const validatedPagination = PaginationSchema.parse(query);
+        return this.coursesService.getCourses(validatedPagination);
+    }
+
+    @Get(':courseId')
+    @HttpCode(200)
+    @ZodSerializerDto(CourseResDTO)
+    getCourseById(@Param('courseId', ParseIntPipe) courseId: number) {
+        return this.coursesService.getCourseById(courseId);
+    }
+
+    @UseGuards(AuthGuard)
     @Patch(':courseId')
+    @HttpCode(200)
     @ZodSerializerDto(CourseResDTO)
     update(
         @Param('courseId', ParseIntPipe) courseId: number,
@@ -42,6 +75,7 @@ export class CoursesController {
 
     @UseGuards(AuthGuard)
     @Delete(':courseId')
+    @HttpCode(200)
     @ZodSerializerDto(DeleteCourseResDTO)
     delete(
         @Param('courseId', ParseIntPipe) courseId: number,
