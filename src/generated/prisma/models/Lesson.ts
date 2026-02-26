@@ -43,6 +43,7 @@ export type LessonMinAggregateOutputType = {
   sectionId: number | null
   title: string | null
   contentUrl: string | null
+  contentText: string | null
   lessonType: $Enums.LessonType | null
   orderIndex: number | null
   status: $Enums.LessonStatus | null
@@ -53,6 +54,7 @@ export type LessonMaxAggregateOutputType = {
   sectionId: number | null
   title: string | null
   contentUrl: string | null
+  contentText: string | null
   lessonType: $Enums.LessonType | null
   orderIndex: number | null
   status: $Enums.LessonStatus | null
@@ -63,6 +65,7 @@ export type LessonCountAggregateOutputType = {
   sectionId: number
   title: number
   contentUrl: number
+  contentText: number
   lessonType: number
   orderIndex: number
   status: number
@@ -87,6 +90,7 @@ export type LessonMinAggregateInputType = {
   sectionId?: true
   title?: true
   contentUrl?: true
+  contentText?: true
   lessonType?: true
   orderIndex?: true
   status?: true
@@ -97,6 +101,7 @@ export type LessonMaxAggregateInputType = {
   sectionId?: true
   title?: true
   contentUrl?: true
+  contentText?: true
   lessonType?: true
   orderIndex?: true
   status?: true
@@ -107,6 +112,7 @@ export type LessonCountAggregateInputType = {
   sectionId?: true
   title?: true
   contentUrl?: true
+  contentText?: true
   lessonType?: true
   orderIndex?: true
   status?: true
@@ -204,6 +210,7 @@ export type LessonGroupByOutputType = {
   sectionId: number
   title: string
   contentUrl: string
+  contentText: string
   lessonType: $Enums.LessonType
   orderIndex: number
   status: $Enums.LessonStatus
@@ -237,6 +244,7 @@ export type LessonWhereInput = {
   sectionId?: Prisma.IntFilter<"Lesson"> | number
   title?: Prisma.StringFilter<"Lesson"> | string
   contentUrl?: Prisma.StringFilter<"Lesson"> | string
+  contentText?: Prisma.StringFilter<"Lesson"> | string
   lessonType?: Prisma.EnumLessonTypeFilter<"Lesson"> | $Enums.LessonType
   orderIndex?: Prisma.IntFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusFilter<"Lesson"> | $Enums.LessonStatus
@@ -249,6 +257,7 @@ export type LessonOrderByWithRelationInput = {
   sectionId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   contentUrl?: Prisma.SortOrder
+  contentText?: Prisma.SortOrder
   lessonType?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -264,6 +273,7 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   sectionId?: Prisma.IntFilter<"Lesson"> | number
   title?: Prisma.StringFilter<"Lesson"> | string
   contentUrl?: Prisma.StringFilter<"Lesson"> | string
+  contentText?: Prisma.StringFilter<"Lesson"> | string
   lessonType?: Prisma.EnumLessonTypeFilter<"Lesson"> | $Enums.LessonType
   orderIndex?: Prisma.IntFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusFilter<"Lesson"> | $Enums.LessonStatus
@@ -276,6 +286,7 @@ export type LessonOrderByWithAggregationInput = {
   sectionId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   contentUrl?: Prisma.SortOrder
+  contentText?: Prisma.SortOrder
   lessonType?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -294,6 +305,7 @@ export type LessonScalarWhereWithAggregatesInput = {
   sectionId?: Prisma.IntWithAggregatesFilter<"Lesson"> | number
   title?: Prisma.StringWithAggregatesFilter<"Lesson"> | string
   contentUrl?: Prisma.StringWithAggregatesFilter<"Lesson"> | string
+  contentText?: Prisma.StringWithAggregatesFilter<"Lesson"> | string
   lessonType?: Prisma.EnumLessonTypeWithAggregatesFilter<"Lesson"> | $Enums.LessonType
   orderIndex?: Prisma.IntWithAggregatesFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusWithAggregatesFilter<"Lesson"> | $Enums.LessonStatus
@@ -302,6 +314,7 @@ export type LessonScalarWhereWithAggregatesInput = {
 export type LessonCreateInput = {
   title: string
   contentUrl: string
+  contentText: string
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
@@ -314,6 +327,7 @@ export type LessonUncheckedCreateInput = {
   sectionId: number
   title: string
   contentUrl: string
+  contentText: string
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
@@ -323,6 +337,7 @@ export type LessonUncheckedCreateInput = {
 export type LessonUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   contentUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  contentText?: Prisma.StringFieldUpdateOperationsInput | string
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
@@ -335,6 +350,7 @@ export type LessonUncheckedUpdateInput = {
   sectionId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   contentUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  contentText?: Prisma.StringFieldUpdateOperationsInput | string
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
@@ -346,6 +362,7 @@ export type LessonCreateManyInput = {
   sectionId: number
   title: string
   contentUrl: string
+  contentText: string
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
@@ -354,6 +371,7 @@ export type LessonCreateManyInput = {
 export type LessonUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   contentUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  contentText?: Prisma.StringFieldUpdateOperationsInput | string
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
@@ -364,6 +382,7 @@ export type LessonUncheckedUpdateManyInput = {
   sectionId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   contentUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  contentText?: Prisma.StringFieldUpdateOperationsInput | string
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
@@ -384,6 +403,7 @@ export type LessonCountOrderByAggregateInput = {
   sectionId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   contentUrl?: Prisma.SortOrder
+  contentText?: Prisma.SortOrder
   lessonType?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -400,6 +420,7 @@ export type LessonMaxOrderByAggregateInput = {
   sectionId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   contentUrl?: Prisma.SortOrder
+  contentText?: Prisma.SortOrder
   lessonType?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -410,6 +431,7 @@ export type LessonMinOrderByAggregateInput = {
   sectionId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   contentUrl?: Prisma.SortOrder
+  contentText?: Prisma.SortOrder
   lessonType?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -493,6 +515,7 @@ export type LessonUpdateOneRequiredWithoutLessonResourcesNestedInput = {
 export type LessonCreateWithoutSectionInput = {
   title: string
   contentUrl: string
+  contentText: string
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
@@ -503,6 +526,7 @@ export type LessonUncheckedCreateWithoutSectionInput = {
   id?: number
   title: string
   contentUrl: string
+  contentText: string
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
@@ -543,6 +567,7 @@ export type LessonScalarWhereInput = {
   sectionId?: Prisma.IntFilter<"Lesson"> | number
   title?: Prisma.StringFilter<"Lesson"> | string
   contentUrl?: Prisma.StringFilter<"Lesson"> | string
+  contentText?: Prisma.StringFilter<"Lesson"> | string
   lessonType?: Prisma.EnumLessonTypeFilter<"Lesson"> | $Enums.LessonType
   orderIndex?: Prisma.IntFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusFilter<"Lesson"> | $Enums.LessonStatus
@@ -551,6 +576,7 @@ export type LessonScalarWhereInput = {
 export type LessonCreateWithoutLessonResourcesInput = {
   title: string
   contentUrl: string
+  contentText: string
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
@@ -562,6 +588,7 @@ export type LessonUncheckedCreateWithoutLessonResourcesInput = {
   sectionId: number
   title: string
   contentUrl: string
+  contentText: string
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
@@ -586,6 +613,7 @@ export type LessonUpdateToOneWithWhereWithoutLessonResourcesInput = {
 export type LessonUpdateWithoutLessonResourcesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   contentUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  contentText?: Prisma.StringFieldUpdateOperationsInput | string
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
@@ -597,6 +625,7 @@ export type LessonUncheckedUpdateWithoutLessonResourcesInput = {
   sectionId?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   contentUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  contentText?: Prisma.StringFieldUpdateOperationsInput | string
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
@@ -606,6 +635,7 @@ export type LessonCreateManySectionInput = {
   id?: number
   title: string
   contentUrl: string
+  contentText: string
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
@@ -614,6 +644,7 @@ export type LessonCreateManySectionInput = {
 export type LessonUpdateWithoutSectionInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   contentUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  contentText?: Prisma.StringFieldUpdateOperationsInput | string
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
@@ -624,6 +655,7 @@ export type LessonUncheckedUpdateWithoutSectionInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   contentUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  contentText?: Prisma.StringFieldUpdateOperationsInput | string
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
@@ -634,6 +666,7 @@ export type LessonUncheckedUpdateManyWithoutSectionInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
   contentUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  contentText?: Prisma.StringFieldUpdateOperationsInput | string
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
@@ -675,6 +708,7 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   sectionId?: boolean
   title?: boolean
   contentUrl?: boolean
+  contentText?: boolean
   lessonType?: boolean
   orderIndex?: boolean
   status?: boolean
@@ -688,6 +722,7 @@ export type LessonSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   sectionId?: boolean
   title?: boolean
   contentUrl?: boolean
+  contentText?: boolean
   lessonType?: boolean
   orderIndex?: boolean
   status?: boolean
@@ -699,6 +734,7 @@ export type LessonSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   sectionId?: boolean
   title?: boolean
   contentUrl?: boolean
+  contentText?: boolean
   lessonType?: boolean
   orderIndex?: boolean
   status?: boolean
@@ -710,12 +746,13 @@ export type LessonSelectScalar = {
   sectionId?: boolean
   title?: boolean
   contentUrl?: boolean
+  contentText?: boolean
   lessonType?: boolean
   orderIndex?: boolean
   status?: boolean
 }
 
-export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sectionId" | "title" | "contentUrl" | "lessonType" | "orderIndex" | "status", ExtArgs["result"]["lesson"]>
+export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sectionId" | "title" | "contentUrl" | "contentText" | "lessonType" | "orderIndex" | "status", ExtArgs["result"]["lesson"]>
 export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   section?: boolean | Prisma.SectionDefaultArgs<ExtArgs>
   lessonResources?: boolean | Prisma.Lesson$lessonResourcesArgs<ExtArgs>
@@ -739,6 +776,7 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     sectionId: number
     title: string
     contentUrl: string
+    contentText: string
     lessonType: $Enums.LessonType
     orderIndex: number
     status: $Enums.LessonStatus
@@ -1171,6 +1209,7 @@ export interface LessonFieldRefs {
   readonly sectionId: Prisma.FieldRef<"Lesson", 'Int'>
   readonly title: Prisma.FieldRef<"Lesson", 'String'>
   readonly contentUrl: Prisma.FieldRef<"Lesson", 'String'>
+  readonly contentText: Prisma.FieldRef<"Lesson", 'String'>
   readonly lessonType: Prisma.FieldRef<"Lesson", 'LessonType'>
   readonly orderIndex: Prisma.FieldRef<"Lesson", 'Int'>
   readonly status: Prisma.FieldRef<"Lesson", 'LessonStatus'>

@@ -2,12 +2,6 @@ import { ConfigSchema } from 'src/config/env.schema';
 import { safeParse } from 'zod';
 
 export const validateEnv = (config: Record<string, unknown>) => {
-  // const configServer = plainToInstance(ConfigSchema, config, {
-  //   enableImplicitConversion: true,
-  // });
-
-  // const e = validateSync(configServer);
-
   const configServer = safeParse(ConfigSchema, config);
 
   if (!configServer.success) {

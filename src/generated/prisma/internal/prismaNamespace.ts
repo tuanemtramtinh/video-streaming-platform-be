@@ -1348,6 +1348,7 @@ export const LessonScalarFieldEnum = {
   sectionId: 'sectionId',
   title: 'title',
   contentUrl: 'contentUrl',
+  contentText: 'contentText',
   lessonType: 'lessonType',
   orderIndex: 'orderIndex',
   status: 'status'
