@@ -37,6 +37,21 @@ export const CourseWithRelationSchema = CourseSchema.extend({
 
 export type CourseWithRelationType = z.infer<typeof CourseWithRelationSchema>;
 
+export const CourseWithPaginationSchema = z.object({
+  data: z.array(CourseWithRelationSchema),
+  meta: z.object({
+    total: z.number(),
+    page: z.number(),
+    lastPage: z.number(),
+    hasNextPage: z.boolean(),
+    hasPrevPage: z.boolean(),
+  }),
+});
+
+export type CourseWithPaginationType = z.infer<
+  typeof CourseWithPaginationSchema
+>;
+
 export const CreateCourseSchema = CourseSchema.omit({
   id: true,
   instructorId: true,

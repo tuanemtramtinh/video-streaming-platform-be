@@ -21,6 +21,7 @@ import {
   CourseResDTO,
   DeleteCourseResDTO,
   UpdateCourseBodyDTO,
+  CourseWithPaginationDTO,
 } from 'src/routes/courses/courses.dto';
 import { CoursesService } from 'src/routes/courses/courses.service';
 import { REQUEST_USER_KEY } from 'src/shared/constants/auth.constant';
@@ -58,6 +59,7 @@ export class CoursesController {
 
   @Get()
   @HttpCode(200)
+  @ZodSerializerDto(CourseWithPaginationDTO)
   getCourses(@Query() query: PaginationInputType) {
     const validatedPagination = PaginationSchema.parse(query);
     return this.coursesService.getCourses(validatedPagination);
@@ -68,6 +70,20 @@ export class CoursesController {
   @ZodSerializerDto(CourseResDTO)
   getCourseById(@Param('courseId', ParseIntPipe) courseId: number) {
     return this.coursesService.getCourseById(courseId);
+  }
+
+  @Get('instructor/:instructorId')
+  @HttpCode(200)
+  @ZodSerializerDto(CourseWithPaginationDTO)
+  getCoursesByInstructorId(
+    @Param('instructorId', ParseIntPipe) instructorId: number,
+    @Query() query: PaginationInputType,
+  ) {
+    const validatedPagination = PaginationSchema.parse(query);
+    return this.coursesService.getCoursesByInstructorId(
+      instructorId,
+      validatedPagination,
+    );
   }
 
   @UseGuards(AuthGuard)

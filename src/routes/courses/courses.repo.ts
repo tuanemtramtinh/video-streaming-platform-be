@@ -102,6 +102,48 @@ export class CoursesRepository {
     });
   }
 
+  async findByInstructorId(
+    instructorId: number,
+    page: number = 1,
+    limit: number = 10,
+  ) {
+    const safePage = Math.max(1, page);
+    const skip = (safePage - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.prismaService.course.findMany({
+        skip,
+        take: limit,
+        where: {
+          instructorId,
+        },
+        orderBy: { createdAt: 'desc' },
+        include: {
+          instructor: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+            },
+          },
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      }),
+      this.prismaService.course.count({
+        where: {
+          instructorId,
+        },
+      }),
+    ]);
+    return { data, meta: { total, page: safePage } };
+  }
+
   async updateById(
     courseId: number,
     data: UpdateCourseBodyType,

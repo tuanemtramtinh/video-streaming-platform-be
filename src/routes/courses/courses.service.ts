@@ -73,6 +73,39 @@ export class CoursesService {
     return course;
   }
 
+  async getCoursesByInstructorId(
+    instructorId: number,
+    pagination: PaginationType,
+  ) {
+    const instructor = await this.userRepository.findUserById(instructorId);
+
+    if (!instructor) {
+      throw new UnprocessableEntityException('Instructor is not exist');
+    }
+    if (!instructor.roles.some((role) => role.role.name === 'teacher')) {
+      throw new UnprocessableEntityException('User is not a teacher');
+    }
+
+    const { page, limit } = pagination;
+    const { data, meta } = await this.coursesRepository.findByInstructorId(
+      instructorId,
+      page,
+      limit,
+    );
+    const lastPage = Math.ceil(meta.total / limit);
+
+    return {
+      data,
+      meta: {
+        total: meta.total,
+        page: meta.page,
+        lastPage: lastPage,
+        hasNextPage: meta.page < lastPage,
+        hasPrevPage: meta.page > 1,
+      },
+    };
+  }
+
   async update(
     courseId: number,
     req: UpdateCourseBodyDTO,
