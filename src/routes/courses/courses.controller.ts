@@ -72,16 +72,19 @@ export class CoursesController {
 
   @UseGuards(AuthGuard)
   @Patch(':courseId')
+  @UseInterceptors(FileInterceptor('thumbnail'))
   @HttpCode(200)
   @ZodSerializerDto(CourseResDTO)
   update(
     @Param('courseId', ParseIntPipe) courseId: number,
+    @UploadedFile() file: Express.Multer.File,
     @Body() req: UpdateCourseBodyDTO,
     @Req() request: RequestWithUser,
   ) {
     return this.coursesService.update(
       courseId,
       req,
+      file,
       request[REQUEST_USER_KEY].id,
     );
   }

@@ -22,6 +22,21 @@ export const CourseSchema = z.object({
 
 export type CourseType = z.infer<typeof CourseSchema>;
 
+export const CourseWithRelationSchema = CourseSchema.extend({
+  instructor: z.object({
+    id: z.number(),
+    firstName: z.string(),
+    lastName: z.string(),
+    email: z.string(),
+  }),
+  category: z.object({
+    id: z.number(),
+    name: z.string(),
+  }),
+});
+
+export type CourseWithRelationType = z.infer<typeof CourseWithRelationSchema>;
+
 export const CreateCourseSchema = CourseSchema.omit({
   id: true,
   instructorId: true,
@@ -30,14 +45,13 @@ export const CreateCourseSchema = CourseSchema.omit({
   thumbnailUrl: true,
 })
   .extend({
-    // thumbnailUrl: z.url('Invalid thumbnail url').optional(),
     status: CourseStatusSchema.default('active'),
   })
   .strict();
 
 export type CreateCourseType = z.infer<typeof CreateCourseSchema>;
 
-export const CreateCourseResSchema = CourseSchema.omit({
+export const CreateCourseResSchema = CourseWithRelationSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
@@ -45,11 +59,13 @@ export const CreateCourseResSchema = CourseSchema.omit({
 
 export type CreateCourseResType = z.infer<typeof CreateCourseResSchema>;
 
-export const UpdateCourseBodySchema = CourseSchema.pick({
-  categoryId: true,
+export const UpdateCourseBodySchema = CourseWithRelationSchema.pick({
   title: true,
   description: true,
   status: true,
+  price: true,
+  discount: true,
+  categoryId: true,
 })
   .extend({
     thumbnailUrl: z.string().url('Invalid thumbnail url').optional(),

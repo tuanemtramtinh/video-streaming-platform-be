@@ -3,6 +3,7 @@ import {
   CreateCourseType,
   CourseType,
   UpdateCourseBodyType,
+  CourseWithRelationType,
 } from 'src/routes/courses/courses.model';
 import { PrismaService } from 'src/shared/services/prisma.service';
 
@@ -14,7 +15,7 @@ export class CoursesRepository {
     courses: CreateCourseType,
     instructorId: number,
     url: string,
-  ): Promise<Omit<CourseType, 'id' | 'createdAt' | 'updatedAt'>> {
+  ): Promise<Omit<CourseWithRelationType, 'id' | 'createdAt' | 'updatedAt'>> {
     return this.prismaService.course.create({
       data: {
         ...courses,
@@ -25,6 +26,22 @@ export class CoursesRepository {
         id: true,
         createdAt: true,
         updatedAt: true,
+      },
+      include: {
+        instructor: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
   }
@@ -38,6 +55,22 @@ export class CoursesRepository {
         skip,
         take: limit,
         orderBy: { createdAt: 'desc' },
+        include: {
+          instructor: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+            },
+          },
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
       }),
       this.prismaService.course.count(),
     ]);
@@ -45,10 +78,26 @@ export class CoursesRepository {
     return { data, meta: { total, page: safePage } };
   }
 
-  async findById(courseId: number): Promise<CourseType | null> {
+  async findById(courseId: number): Promise<CourseWithRelationType | null> {
     return this.prismaService.course.findUnique({
       where: {
         id: courseId,
+      },
+      include: {
+        instructor: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
   }
@@ -56,10 +105,26 @@ export class CoursesRepository {
   async updateById(
     courseId: number,
     data: UpdateCourseBodyType,
-  ): Promise<CourseType> {
+  ): Promise<CourseWithRelationType> {
     return this.prismaService.course.update({
       where: {
         id: courseId,
+      },
+      include: {
+        instructor: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
       data,
     });

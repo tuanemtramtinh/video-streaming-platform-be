@@ -73,7 +73,12 @@ export class CoursesService {
     return course;
   }
 
-  async update(courseId: number, req: UpdateCourseBodyDTO, userId: number) {
+  async update(
+    courseId: number,
+    req: UpdateCourseBodyDTO,
+    file: Express.Multer.File,
+    userId: number,
+  ) {
     const currentCourse = await this.coursesRepository.findById(courseId);
 
     if (!currentCourse) {
@@ -86,7 +91,21 @@ export class CoursesService {
       );
     }
 
-    return this.coursesRepository.updateById(courseId, req);
+    if (file) {
+      const thumbnailUrl = new URL(currentCourse.thumbnailUrl);
+      const path = thumbnailUrl.pathname;
+      const key = path.replace(
+        `/${this.configService.get('S3_BUCKET_NAME')}/`,
+        '',
+      );
+      await this.s3Service.deleteFile(key);
+      const { url } = await this.s3Service.uploadFile(file);
+      req.thumbnailUrl = url;
+    }
+
+    const res = await this.coursesRepository.updateById(courseId, req);
+
+    return res;
   }
 
   async delete(courseId: number, userId: number) {
@@ -108,8 +127,6 @@ export class CoursesService {
       `/${this.configService.get('S3_BUCKET_NAME')}/`,
       '',
     );
-
-    console.log(key);
 
     await this.s3Service.deleteFile(key);
 
