@@ -26,8 +26,12 @@ export class AuthService {
   async register(req: RegisterBodyDTO) {
     const existingUser = await this.userRepository.findUserByEmail(req.email);
 
+    if (req.password !== req.confirmPassword) {
+      throw new ConflictException('Mật khẩu không trùng khớp');
+    }
+
     if (existingUser) {
-      throw new ConflictException('Email already exist');
+      throw new ConflictException('Tài khoản đã tồn tại');
     }
 
     const user = {
@@ -49,7 +53,7 @@ export class AuthService {
     const user = await this.userRepository.findUserByEmail(req.email, true);
 
     if (!user) {
-      throw new UnauthorizedException('Account is not exist');
+      throw new UnauthorizedException('Tài khoản không tồn tại');
     }
 
     const isPasswordMatch = await this.hasingService.compare(
@@ -58,12 +62,7 @@ export class AuthService {
     );
 
     if (!isPasswordMatch) {
-      throw new UnprocessableEntityException([
-        {
-          field: 'password',
-          error: 'Password is incorrect',
-        },
-      ]);
+      throw new UnprocessableEntityException('Mật khẩu không chính xác');
     }
 
     const userWithoutPassword = {

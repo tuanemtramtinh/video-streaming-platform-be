@@ -33,7 +33,11 @@ export const RegisterBodySchema = UserSchema.omit({
   createdAt: true,
   updatedAt: true,
   roles: true,
-}).strict();
+})
+  .extend({
+    confirmPassword: z.string(),
+  })
+  .strict();
 
 export type RegisterBodyType = z.infer<typeof RegisterBodySchema>;
 
