@@ -8,6 +8,7 @@ import {
   CreateCourseDTO,
   UpdateCourseBodyDTO,
 } from 'src/routes/courses/courses.dto';
+import { SearchCourseQueryType } from 'src/routes/courses/courses.model';
 import { CoursesRepository } from 'src/routes/courses/courses.repo';
 import { PaginationType } from 'src/shared/models/pagination.model';
 import { UserRepository } from 'src/routes/users/user.repo';
@@ -22,7 +23,7 @@ export class CoursesService {
     private readonly userRepository: UserRepository,
     private readonly s3Service: S3Service,
     private readonly configService: ConfigService<Config>,
-  ) {}
+  ) { }
 
   async create(
     file: Express.Multer.File,
@@ -71,6 +72,26 @@ export class CoursesService {
     }
 
     return course;
+  }
+
+  async searchCourses(query: SearchCourseQueryType) {
+    const { page, limit, name } = query;
+    const { data, meta } = await this.coursesRepository.searchByName(
+      name,
+      page,
+      limit,
+    );
+    const lastPage = Math.ceil(meta.total / limit);
+
+    return {
+      data,
+      meta: {
+        ...meta,
+        lastPage,
+        hasNextPage: page < lastPage,
+        hasPrevPage: page > 1,
+      },
+    };
   }
 
   async getCoursesByInstructorId(
