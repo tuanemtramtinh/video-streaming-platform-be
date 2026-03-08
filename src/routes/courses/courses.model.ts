@@ -1,4 +1,5 @@
 import z from 'zod';
+import { PaginationInput } from 'src/shared/models/pagination.model';
 
 export const CourseStatusSchema = z.enum(['active', 'inactive', 'draft']);
 export type CourseStatusType = z.infer<typeof CourseStatusSchema>;
@@ -51,6 +52,12 @@ export const CourseWithPaginationSchema = z.object({
 export type CourseWithPaginationType = z.infer<
   typeof CourseWithPaginationSchema
 >;
+
+export const SearchCourseQuerySchema = PaginationInput.extend({
+  name: z.string().trim().min(1, 'Course name is required'),
+});
+
+export type SearchCourseQueryType = z.infer<typeof SearchCourseQuerySchema>;
 
 export const CreateCourseSchema = CourseSchema.omit({
   id: true,

@@ -9,7 +9,7 @@ import { PrismaService } from 'src/shared/services/prisma.service';
 
 @Injectable()
 export class CoursesRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   async create(
     courses: CreateCourseType,
@@ -141,6 +141,48 @@ export class CoursesRepository {
         },
       }),
     ]);
+    return { data, meta: { total, page: safePage } };
+  }
+
+  async searchByName(name: string, page: number = 1, limit: number = 10) {
+    const safePage = Math.max(1, page);
+    const skip = (safePage - 1) * limit;
+
+    const whereClause = {
+      title: {
+        contains: name,
+        mode: 'insensitive' as const,
+      },
+    };
+
+    const [data, total] = await Promise.all([
+      this.prismaService.course.findMany({
+        skip,
+        take: limit,
+        where: whereClause,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          instructor: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+            },
+          },
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      }),
+      this.prismaService.course.count({
+        where: whereClause,
+      }),
+    ]);
+
     return { data, meta: { total, page: safePage } };
   }
 
