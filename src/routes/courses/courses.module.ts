@@ -7,5 +7,6 @@ import { UserRepository } from 'src/routes/users/user.repo';
 @Module({
   controllers: [CoursesController],
   providers: [CoursesService, CoursesRepository, UserRepository],
+  exports: [CoursesRepository],
 })
 export class CoursesModule {}
