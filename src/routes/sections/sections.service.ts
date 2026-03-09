@@ -47,12 +47,19 @@ export class SectionsService {
     return section;
   }
 
-  async getSectionsByCourseId(courseId: number) {
+  async getSectionsByCourseId(courseId: number, pagination: PaginationType) {
+    const { page, limit } = pagination;
     const course = await this.coursesRepository.findById(courseId);
     if (!course) {
       throw new UnprocessableEntityException('Course is not exist');
     }
-    return this.sectionsRepository.findByCourseId(courseId);
+    const { data, meta } = await this.sectionsRepository.findByCourseId(
+      courseId,
+      page,
+      limit,
+    );
+    const lastPage = Math.ceil(meta.total / limit);
+    return { data, meta: { ...meta, lastPage } };
   }
 
   async updateSection(

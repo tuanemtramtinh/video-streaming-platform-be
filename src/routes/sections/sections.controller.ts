@@ -14,8 +14,6 @@ import {
 import { ZodSerializerDto } from 'nestjs-zod';
 import { SectionsService } from './sections.service';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
-import { REQUEST_USER_KEY } from 'src/shared/constants/auth.constant';
-import { Request } from 'express';
 import {
   PaginationSchema,
   type PaginationInputType,
@@ -26,12 +24,6 @@ import {
   SectionWithPaginationDTO,
   SectionWithRelationDTO,
 } from './sections.dto';
-
-type RequestWithUser = Request & {
-  [REQUEST_USER_KEY]: {
-    id: number;
-  };
-};
 
 @Controller('sections')
 export class SectionsController {
@@ -66,8 +58,15 @@ export class SectionsController {
   @Get('course/:courseId')
   @HttpCode(200)
   @ZodSerializerDto(SectionWithPaginationDTO)
-  getSectionsByCourseId(@Param('courseId', ParseIntPipe) courseId: number) {
-    return this.sectionsService.getSectionsByCourseId(courseId);
+  getSectionsByCourseId(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Query() query: PaginationInputType,
+  ) {
+    const validatedPagination = PaginationSchema.parse(query);
+    return this.sectionsService.getSectionsByCourseId(
+      courseId,
+      validatedPagination,
+    );
   }
 
   @UseGuards(AuthGuard)

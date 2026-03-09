@@ -8,4 +8,4 @@ import { UserRepository } from 'src/routes/users/user.repo';
   controllers: [LessonsController],
   providers: [LessonsService, LessonsRepository, UserRepository],
 })
-export class LessonsModule { }
+export class LessonsModule {}
