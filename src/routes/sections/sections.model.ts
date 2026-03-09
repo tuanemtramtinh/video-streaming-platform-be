@@ -1,5 +1,5 @@
-import { CourseStatusSchema } from '../courses/courses.model';
 import z from 'zod';
+import { LessonSchema } from '../lessons/lessons.model';
 
 export const SectionStatusSchema = z.enum(['active', 'inactive']);
 export type SectionStatusType = z.infer<typeof SectionStatusSchema>;
@@ -18,15 +18,7 @@ export const SectionSchema = z.object({
 export type SectionType = z.infer<typeof SectionSchema>;
 
 export const SectionWithRelationSchema = SectionSchema.extend({
-  course: z.object({
-    id: z.number(),
-    title: z.string(),
-    description: z.string(),
-    thumbnailUrl: z.string(),
-    price: z.number(),
-    discount: z.number(),
-    status: CourseStatusSchema,
-  }),
+  lessons: z.array(LessonSchema),
 });
 
 export type SectionWithRelationType = z.infer<typeof SectionWithRelationSchema>;

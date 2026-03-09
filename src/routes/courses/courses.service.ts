@@ -23,7 +23,7 @@ export class CoursesService {
     private readonly userRepository: UserRepository,
     private readonly s3Service: S3Service,
     private readonly configService: ConfigService<Config>,
-  ) { }
+  ) {}
 
   async create(
     file: Express.Multer.File,
@@ -66,6 +66,16 @@ export class CoursesService {
 
   async getCourseById(courseId: number) {
     const course = await this.coursesRepository.findById(courseId);
+
+    if (!course) {
+      throw new NotFoundException('Course is not found');
+    }
+
+    return course;
+  }
+
+  async getCourseDetailWithSectionsAndLessons(courseId: number) {
+    const course = await this.coursesRepository.findDetailById(courseId);
 
     if (!course) {
       throw new NotFoundException('Course is not found');

@@ -4,12 +4,13 @@ import {
   CourseType,
   UpdateCourseBodyType,
   CourseWithRelationType,
+  CourseDetailWithSectionsAndLessonsType,
 } from 'src/routes/courses/courses.model';
 import { PrismaService } from 'src/shared/services/prisma.service';
 
 @Injectable()
 export class CoursesRepository {
-  constructor(private readonly prismaService: PrismaService) { }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async create(
     courses: CreateCourseType,
@@ -96,6 +97,40 @@ export class CoursesRepository {
           select: {
             id: true,
             name: true,
+          },
+        },
+      },
+    });
+  }
+
+  async findDetailById(
+    courseId: number,
+  ): Promise<CourseDetailWithSectionsAndLessonsType | null> {
+    return this.prismaService.course.findUnique({
+      where: {
+        id: courseId,
+      },
+      include: {
+        instructor: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        sections: {
+          orderBy: { orderIndex: 'asc' },
+          include: {
+            lessons: {
+              orderBy: { orderIndex: 'asc' },
+            },
           },
         },
       },

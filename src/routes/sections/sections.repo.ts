@@ -20,17 +20,7 @@ export class SectionsRepository {
         id: true,
       },
       include: {
-        course: {
-          select: {
-            id: true,
-            title: true,
-            description: true,
-            thumbnailUrl: true,
-            price: true,
-            discount: true,
-            status: true,
-          },
-        },
+        lessons: true,
       },
     });
   }
@@ -45,17 +35,7 @@ export class SectionsRepository {
         skip,
         take: limit,
         include: {
-          course: {
-            select: {
-              id: true,
-              title: true,
-              description: true,
-              thumbnailUrl: true,
-              price: true,
-              discount: true,
-              status: true,
-            },
-          },
+          lessons: true,
         },
       }),
       this.prismaService.section.count(),
@@ -76,17 +56,7 @@ export class SectionsRepository {
     return this.prismaService.section.findUnique({
       where: { id: sectionId },
       include: {
-        course: {
-          select: {
-            id: true,
-            title: true,
-            description: true,
-            thumbnailUrl: true,
-            price: true,
-            discount: true,
-            status: true,
-          },
-        },
+        lessons: true,
       },
     });
   }
@@ -104,17 +74,7 @@ export class SectionsRepository {
         take: limit,
         where: { courseId },
         include: {
-          course: {
-            select: {
-              id: true,
-              title: true,
-              description: true,
-              thumbnailUrl: true,
-              price: true,
-              discount: true,
-              status: true,
-            },
-          },
+          lessons: true,
         },
       }),
       this.prismaService.section.count({
@@ -141,17 +101,7 @@ export class SectionsRepository {
       where: { id: sectionId },
       data: updateData,
       include: {
-        course: {
-          select: {
-            id: true,
-            title: true,
-            description: true,
-            thumbnailUrl: true,
-            price: true,
-            discount: true,
-            status: true,
-          },
-        },
+        lessons: true,
       },
     });
   }

@@ -6,6 +6,7 @@ import {
   UpdateCourseBodySchema,
   CourseWithRelationSchema,
   CourseWithPaginationSchema,
+  CourseDetailWithSectionsAndLessonsSchema,
 } from 'src/routes/courses/courses.model';
 
 export class CreateCourseDTO extends createZodDto(CreateCourseSchema) {}
@@ -16,6 +17,10 @@ export class CourseResDTO extends createZodDto(CourseWithRelationSchema) {}
 
 export class CourseWithPaginationDTO extends createZodDto(
   CourseWithPaginationSchema,
+) {}
+
+export class CourseDetailResDTO extends createZodDto(
+  CourseDetailWithSectionsAndLessonsSchema,
 ) {}
 
 export class UpdateCourseBodyDTO extends createZodDto(UpdateCourseBodySchema) {}

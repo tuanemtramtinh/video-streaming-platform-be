@@ -1,5 +1,7 @@
 import z from 'zod';
 import { PaginationInput } from 'src/shared/models/pagination.model';
+import { SectionSchema } from 'src/routes/sections/sections.model';
+import { LessonSchema } from 'src/routes/lessons/lessons.model';
 
 export const CourseStatusSchema = z.enum(['active', 'inactive', 'draft']);
 export type CourseStatusType = z.infer<typeof CourseStatusSchema>;
@@ -37,6 +39,21 @@ export const CourseWithRelationSchema = CourseSchema.extend({
 });
 
 export type CourseWithRelationType = z.infer<typeof CourseWithRelationSchema>;
+
+export const SectionWithLessonsSchema = SectionSchema.extend({
+  lessons: z.array(LessonSchema),
+});
+
+export type SectionWithLessonsType = z.infer<typeof SectionWithLessonsSchema>;
+
+export const CourseDetailWithSectionsAndLessonsSchema =
+  CourseWithRelationSchema.extend({
+    sections: z.array(SectionWithLessonsSchema),
+  });
+
+export type CourseDetailWithSectionsAndLessonsType = z.infer<
+  typeof CourseDetailWithSectionsAndLessonsSchema
+>;
 
 export const CourseWithPaginationSchema = z.object({
   data: z.array(CourseWithRelationSchema),
