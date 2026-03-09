@@ -23,6 +23,7 @@ import {
   CreateSectionResDTO,
   SectionWithPaginationDTO,
   SectionWithRelationDTO,
+  UpdateSectionBodyDTO,
 } from './sections.dto';
 
 @Controller('sections')
@@ -75,7 +76,7 @@ export class SectionsController {
   @ZodSerializerDto(SectionWithRelationDTO)
   updateSection(
     @Param('sectionId', ParseIntPipe) sectionId: number,
-    @Body() updateSectionBody: CreateSectionDTO,
+    @Body() updateSectionBody: UpdateSectionBodyDTO,
   ) {
     return this.sectionsService.updateSection(sectionId, updateSectionBody);
   }

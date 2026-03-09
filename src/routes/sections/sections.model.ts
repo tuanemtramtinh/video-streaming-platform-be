@@ -73,6 +73,8 @@ export const UpdateSectionSchema = SectionSchema.pick({
     message: 'At least one field must be provided',
   });
 
+// Backward/forward-friendly naming: some layers may prefer `UpdateSection`
+export type UpdateSection = z.infer<typeof UpdateSectionSchema>;
 export type UpdateSectionType = z.infer<typeof UpdateSectionSchema>;
 
 export const DeleteSectionResSchema = z.object({
