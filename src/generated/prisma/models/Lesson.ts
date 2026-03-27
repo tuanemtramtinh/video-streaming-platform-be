@@ -47,6 +47,7 @@ export type LessonMinAggregateOutputType = {
   lessonType: $Enums.LessonType | null
   orderIndex: number | null
   status: $Enums.LessonStatus | null
+  videoStatus: $Enums.VideoStatus | null
 }
 
 export type LessonMaxAggregateOutputType = {
@@ -58,6 +59,7 @@ export type LessonMaxAggregateOutputType = {
   lessonType: $Enums.LessonType | null
   orderIndex: number | null
   status: $Enums.LessonStatus | null
+  videoStatus: $Enums.VideoStatus | null
 }
 
 export type LessonCountAggregateOutputType = {
@@ -69,6 +71,7 @@ export type LessonCountAggregateOutputType = {
   lessonType: number
   orderIndex: number
   status: number
+  videoStatus: number
   _all: number
 }
 
@@ -94,6 +97,7 @@ export type LessonMinAggregateInputType = {
   lessonType?: true
   orderIndex?: true
   status?: true
+  videoStatus?: true
 }
 
 export type LessonMaxAggregateInputType = {
@@ -105,6 +109,7 @@ export type LessonMaxAggregateInputType = {
   lessonType?: true
   orderIndex?: true
   status?: true
+  videoStatus?: true
 }
 
 export type LessonCountAggregateInputType = {
@@ -116,6 +121,7 @@ export type LessonCountAggregateInputType = {
   lessonType?: true
   orderIndex?: true
   status?: true
+  videoStatus?: true
   _all?: true
 }
 
@@ -214,6 +220,7 @@ export type LessonGroupByOutputType = {
   lessonType: $Enums.LessonType
   orderIndex: number
   status: $Enums.LessonStatus
+  videoStatus: $Enums.VideoStatus
   _count: LessonCountAggregateOutputType | null
   _avg: LessonAvgAggregateOutputType | null
   _sum: LessonSumAggregateOutputType | null
@@ -248,6 +255,7 @@ export type LessonWhereInput = {
   lessonType?: Prisma.EnumLessonTypeFilter<"Lesson"> | $Enums.LessonType
   orderIndex?: Prisma.IntFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusFilter<"Lesson"> | $Enums.LessonStatus
+  videoStatus?: Prisma.EnumVideoStatusFilter<"Lesson"> | $Enums.VideoStatus
   section?: Prisma.XOR<Prisma.SectionScalarRelationFilter, Prisma.SectionWhereInput>
   lessonResources?: Prisma.LessonResourceListRelationFilter
 }
@@ -261,6 +269,7 @@ export type LessonOrderByWithRelationInput = {
   lessonType?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  videoStatus?: Prisma.SortOrder
   section?: Prisma.SectionOrderByWithRelationInput
   lessonResources?: Prisma.LessonResourceOrderByRelationAggregateInput
 }
@@ -277,6 +286,7 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   lessonType?: Prisma.EnumLessonTypeFilter<"Lesson"> | $Enums.LessonType
   orderIndex?: Prisma.IntFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusFilter<"Lesson"> | $Enums.LessonStatus
+  videoStatus?: Prisma.EnumVideoStatusFilter<"Lesson"> | $Enums.VideoStatus
   section?: Prisma.XOR<Prisma.SectionScalarRelationFilter, Prisma.SectionWhereInput>
   lessonResources?: Prisma.LessonResourceListRelationFilter
 }, "id">
@@ -290,6 +300,7 @@ export type LessonOrderByWithAggregationInput = {
   lessonType?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  videoStatus?: Prisma.SortOrder
   _count?: Prisma.LessonCountOrderByAggregateInput
   _avg?: Prisma.LessonAvgOrderByAggregateInput
   _max?: Prisma.LessonMaxOrderByAggregateInput
@@ -309,6 +320,7 @@ export type LessonScalarWhereWithAggregatesInput = {
   lessonType?: Prisma.EnumLessonTypeWithAggregatesFilter<"Lesson"> | $Enums.LessonType
   orderIndex?: Prisma.IntWithAggregatesFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusWithAggregatesFilter<"Lesson"> | $Enums.LessonStatus
+  videoStatus?: Prisma.EnumVideoStatusWithAggregatesFilter<"Lesson"> | $Enums.VideoStatus
 }
 
 export type LessonCreateInput = {
@@ -318,6 +330,7 @@ export type LessonCreateInput = {
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
+  videoStatus?: $Enums.VideoStatus
   section: Prisma.SectionCreateNestedOneWithoutLessonsInput
   lessonResources?: Prisma.LessonResourceCreateNestedManyWithoutLessonInput
 }
@@ -331,6 +344,7 @@ export type LessonUncheckedCreateInput = {
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
+  videoStatus?: $Enums.VideoStatus
   lessonResources?: Prisma.LessonResourceUncheckedCreateNestedManyWithoutLessonInput
 }
 
@@ -341,6 +355,7 @@ export type LessonUpdateInput = {
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  videoStatus?: Prisma.EnumVideoStatusFieldUpdateOperationsInput | $Enums.VideoStatus
   section?: Prisma.SectionUpdateOneRequiredWithoutLessonsNestedInput
   lessonResources?: Prisma.LessonResourceUpdateManyWithoutLessonNestedInput
 }
@@ -354,6 +369,7 @@ export type LessonUncheckedUpdateInput = {
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  videoStatus?: Prisma.EnumVideoStatusFieldUpdateOperationsInput | $Enums.VideoStatus
   lessonResources?: Prisma.LessonResourceUncheckedUpdateManyWithoutLessonNestedInput
 }
 
@@ -366,6 +382,7 @@ export type LessonCreateManyInput = {
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
+  videoStatus?: $Enums.VideoStatus
 }
 
 export type LessonUpdateManyMutationInput = {
@@ -375,6 +392,7 @@ export type LessonUpdateManyMutationInput = {
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  videoStatus?: Prisma.EnumVideoStatusFieldUpdateOperationsInput | $Enums.VideoStatus
 }
 
 export type LessonUncheckedUpdateManyInput = {
@@ -386,6 +404,7 @@ export type LessonUncheckedUpdateManyInput = {
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  videoStatus?: Prisma.EnumVideoStatusFieldUpdateOperationsInput | $Enums.VideoStatus
 }
 
 export type LessonListRelationFilter = {
@@ -407,6 +426,7 @@ export type LessonCountOrderByAggregateInput = {
   lessonType?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  videoStatus?: Prisma.SortOrder
 }
 
 export type LessonAvgOrderByAggregateInput = {
@@ -424,6 +444,7 @@ export type LessonMaxOrderByAggregateInput = {
   lessonType?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  videoStatus?: Prisma.SortOrder
 }
 
 export type LessonMinOrderByAggregateInput = {
@@ -435,6 +456,7 @@ export type LessonMinOrderByAggregateInput = {
   lessonType?: Prisma.SortOrder
   orderIndex?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  videoStatus?: Prisma.SortOrder
 }
 
 export type LessonSumOrderByAggregateInput = {
@@ -498,6 +520,10 @@ export type EnumLessonStatusFieldUpdateOperationsInput = {
   set?: $Enums.LessonStatus
 }
 
+export type EnumVideoStatusFieldUpdateOperationsInput = {
+  set?: $Enums.VideoStatus
+}
+
 export type LessonCreateNestedOneWithoutLessonResourcesInput = {
   create?: Prisma.XOR<Prisma.LessonCreateWithoutLessonResourcesInput, Prisma.LessonUncheckedCreateWithoutLessonResourcesInput>
   connectOrCreate?: Prisma.LessonCreateOrConnectWithoutLessonResourcesInput
@@ -519,6 +545,7 @@ export type LessonCreateWithoutSectionInput = {
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
+  videoStatus?: $Enums.VideoStatus
   lessonResources?: Prisma.LessonResourceCreateNestedManyWithoutLessonInput
 }
 
@@ -530,6 +557,7 @@ export type LessonUncheckedCreateWithoutSectionInput = {
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
+  videoStatus?: $Enums.VideoStatus
   lessonResources?: Prisma.LessonResourceUncheckedCreateNestedManyWithoutLessonInput
 }
 
@@ -571,6 +599,7 @@ export type LessonScalarWhereInput = {
   lessonType?: Prisma.EnumLessonTypeFilter<"Lesson"> | $Enums.LessonType
   orderIndex?: Prisma.IntFilter<"Lesson"> | number
   status?: Prisma.EnumLessonStatusFilter<"Lesson"> | $Enums.LessonStatus
+  videoStatus?: Prisma.EnumVideoStatusFilter<"Lesson"> | $Enums.VideoStatus
 }
 
 export type LessonCreateWithoutLessonResourcesInput = {
@@ -580,6 +609,7 @@ export type LessonCreateWithoutLessonResourcesInput = {
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
+  videoStatus?: $Enums.VideoStatus
   section: Prisma.SectionCreateNestedOneWithoutLessonsInput
 }
 
@@ -592,6 +622,7 @@ export type LessonUncheckedCreateWithoutLessonResourcesInput = {
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
+  videoStatus?: $Enums.VideoStatus
 }
 
 export type LessonCreateOrConnectWithoutLessonResourcesInput = {
@@ -617,6 +648,7 @@ export type LessonUpdateWithoutLessonResourcesInput = {
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  videoStatus?: Prisma.EnumVideoStatusFieldUpdateOperationsInput | $Enums.VideoStatus
   section?: Prisma.SectionUpdateOneRequiredWithoutLessonsNestedInput
 }
 
@@ -629,6 +661,7 @@ export type LessonUncheckedUpdateWithoutLessonResourcesInput = {
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  videoStatus?: Prisma.EnumVideoStatusFieldUpdateOperationsInput | $Enums.VideoStatus
 }
 
 export type LessonCreateManySectionInput = {
@@ -639,6 +672,7 @@ export type LessonCreateManySectionInput = {
   lessonType: $Enums.LessonType
   orderIndex: number
   status?: $Enums.LessonStatus
+  videoStatus?: $Enums.VideoStatus
 }
 
 export type LessonUpdateWithoutSectionInput = {
@@ -648,6 +682,7 @@ export type LessonUpdateWithoutSectionInput = {
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  videoStatus?: Prisma.EnumVideoStatusFieldUpdateOperationsInput | $Enums.VideoStatus
   lessonResources?: Prisma.LessonResourceUpdateManyWithoutLessonNestedInput
 }
 
@@ -659,6 +694,7 @@ export type LessonUncheckedUpdateWithoutSectionInput = {
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  videoStatus?: Prisma.EnumVideoStatusFieldUpdateOperationsInput | $Enums.VideoStatus
   lessonResources?: Prisma.LessonResourceUncheckedUpdateManyWithoutLessonNestedInput
 }
 
@@ -670,6 +706,7 @@ export type LessonUncheckedUpdateManyWithoutSectionInput = {
   lessonType?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
   orderIndex?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  videoStatus?: Prisma.EnumVideoStatusFieldUpdateOperationsInput | $Enums.VideoStatus
 }
 
 
@@ -712,6 +749,7 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   lessonType?: boolean
   orderIndex?: boolean
   status?: boolean
+  videoStatus?: boolean
   section?: boolean | Prisma.SectionDefaultArgs<ExtArgs>
   lessonResources?: boolean | Prisma.Lesson$lessonResourcesArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
@@ -726,6 +764,7 @@ export type LessonSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   lessonType?: boolean
   orderIndex?: boolean
   status?: boolean
+  videoStatus?: boolean
   section?: boolean | Prisma.SectionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
@@ -738,6 +777,7 @@ export type LessonSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   lessonType?: boolean
   orderIndex?: boolean
   status?: boolean
+  videoStatus?: boolean
   section?: boolean | Prisma.SectionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
@@ -750,9 +790,10 @@ export type LessonSelectScalar = {
   lessonType?: boolean
   orderIndex?: boolean
   status?: boolean
+  videoStatus?: boolean
 }
 
-export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sectionId" | "title" | "contentUrl" | "contentText" | "lessonType" | "orderIndex" | "status", ExtArgs["result"]["lesson"]>
+export type LessonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sectionId" | "title" | "contentUrl" | "contentText" | "lessonType" | "orderIndex" | "status" | "videoStatus", ExtArgs["result"]["lesson"]>
 export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   section?: boolean | Prisma.SectionDefaultArgs<ExtArgs>
   lessonResources?: boolean | Prisma.Lesson$lessonResourcesArgs<ExtArgs>
@@ -780,6 +821,7 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     lessonType: $Enums.LessonType
     orderIndex: number
     status: $Enums.LessonStatus
+    videoStatus: $Enums.VideoStatus
   }, ExtArgs["result"]["lesson"]>
   composites: {}
 }
@@ -1213,6 +1255,7 @@ export interface LessonFieldRefs {
   readonly lessonType: Prisma.FieldRef<"Lesson", 'LessonType'>
   readonly orderIndex: Prisma.FieldRef<"Lesson", 'Int'>
   readonly status: Prisma.FieldRef<"Lesson", 'LessonStatus'>
+  readonly videoStatus: Prisma.FieldRef<"Lesson", 'VideoStatus'>
 }
     
 

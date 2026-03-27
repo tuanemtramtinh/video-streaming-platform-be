@@ -4,6 +4,7 @@ import {
   LessonType,
   LessonWithRelationType,
   UpdateLessonBodyType,
+  VideoStatusType,
 } from 'src/routes/lessons/lessons.model';
 import { PrismaService } from 'src/shared/services/prisma.service';
 
@@ -128,6 +129,24 @@ export class LessonsRepository {
       where: {
         id: lessonId,
       },
+    });
+  }
+
+  async updateVideoStatus(lessonId: number, videoStatus: VideoStatusType) {
+    return this.prismaService.lesson.update({
+      where: { id: lessonId },
+      data: { videoStatus },
+    });
+  }
+
+  async updateContentUrlAndVideoStatus(
+    lessonId: number,
+    contentUrl: string,
+    videoStatus: VideoStatusType,
+  ) {
+    return this.prismaService.lesson.update({
+      where: { id: lessonId },
+      data: { contentUrl, videoStatus },
     });
   }
 }

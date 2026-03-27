@@ -18,6 +18,7 @@ import {
   DeleteLessonResDTO,
   LessonResDTO,
   LessonWithPaginationDTO,
+  ProcessVideoResDTO,
   UpdateLessonBodyDTO,
 } from 'src/routes/lessons/lessons.dto';
 import { LessonsService } from 'src/routes/lessons/lessons.service';
@@ -86,5 +87,20 @@ export class LessonsController {
     @Req() request: RequestWithUser,
   ) {
     return this.lessonsService.delete(lessonId, request[REQUEST_USER_KEY].id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post(':lessonId/process-video')
+  @HttpCode(200)
+  @ZodSerializerDto(ProcessVideoResDTO)
+  processVideo(
+    @Param('lessonId', ParseIntPipe) lessonId: number,
+    @Req() request: RequestWithUser,
+  ) {
+    return this.lessonsService.processVideo(
+      lessonId,
+      request[REQUEST_USER_KEY].id,
+      undefined,
+    );
   }
 }

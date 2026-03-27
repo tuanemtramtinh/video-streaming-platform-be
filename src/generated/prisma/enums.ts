@@ -34,6 +34,16 @@ export const LessonStatus = {
 export type LessonStatus = (typeof LessonStatus)[keyof typeof LessonStatus]
 
 
+export const VideoStatus = {
+  pending: 'pending',
+  processing: 'processing',
+  ready: 'ready',
+  failed: 'failed'
+} as const
+
+export type VideoStatus = (typeof VideoStatus)[keyof typeof VideoStatus]
+
+
 export const LessonType = {
   video: 'video',
   document: 'document',
