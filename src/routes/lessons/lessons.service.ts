@@ -1,18 +1,26 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Config } from 'src/config/env.schema';
 import { LessonsRepository } from 'src/routes/lessons/lessons.repo';
 import {
   CreateLessonDTO,
   UpdateLessonBodyDTO,
 } from 'src/routes/lessons/lessons.dto';
 import { LessonPaginationQueryType } from 'src/routes/lessons/lessons.model';
+import { VideoProcessingQueueService } from 'src/shared/queues/video-processing.queue';
 
 @Injectable()
 export class LessonsService {
-  constructor(private readonly lessonsRepository: LessonsRepository) {}
+  constructor(
+    private readonly lessonsRepository: LessonsRepository,
+    private readonly videoProcessingQueue: VideoProcessingQueueService,
+    private readonly configService: ConfigService<Config>,
+  ) {}
 
   async create(req: CreateLessonDTO, userId: number) {
     const section = await this.lessonsRepository.findSectionById(req.sectionId);
@@ -110,5 +118,70 @@ export class LessonsService {
     return {
       message: 'Lesson deleted successfully',
     };
+  }
+
+  async processVideo(
+    lessonId: number,
+    userId: number,
+    _unused?: unknown,
+  ) {
+    const lesson = await this.lessonsRepository.findById(lessonId);
+
+    if (!lesson) {
+      throw new NotFoundException('Lesson is not found');
+    }
+
+    if (lesson.section.course.instructorId !== userId) {
+      throw new ForbiddenException(
+        'You do not have permission to process video for this lesson',
+      );
+    }
+
+    if (lesson.videoStatus === 'processing') {
+      throw new BadRequestException(
+        'Video is already being processed for this lesson',
+      );
+    }
+
+    await this.lessonsRepository.updateVideoStatus(lessonId, 'processing');
+
+    const videoKey = this.extractVideoKeyFromContentUrl(lesson.contentUrl);
+
+    await this.videoProcessingQueue.addVideoProcessingJob({
+      lessonId,
+      videoKey,
+    });
+
+    return {
+      message: 'Video processing has been queued',
+      lessonId,
+      videoStatus: 'processing' as const,
+    };
+  }
+
+  private extractVideoKeyFromContentUrl(contentUrl: string): string {
+    if (!contentUrl) {
+      throw new BadRequestException('Lesson contentUrl is empty');
+    }
+
+    const bucketName = this.configService.get('S3_BUCKET_NAME');
+
+    try {
+      const parsedUrl = new URL(contentUrl);
+      let key = parsedUrl.pathname.replace(/^\/+/, '');
+
+      if (bucketName && key.startsWith(`${bucketName}/`)) {
+        key = key.slice(bucketName.length + 1);
+      }
+
+      if (!key) {
+        throw new BadRequestException('Cannot extract video key from contentUrl');
+      }
+
+      return key;
+    } catch {
+      // Fallback: allow raw key in contentUrl field for non-URL values.
+      return contentUrl.replace(/^\/+/, '');
+    }
   }
 }

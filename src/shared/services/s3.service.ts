@@ -1,11 +1,16 @@
 import {
   DeleteObjectCommand,
+  GetObjectCommand,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { createWriteStream } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
+import { pipeline } from 'node:stream/promises';
+import { Readable } from 'node:stream';
 import { Config } from 'src/config/env.schema';
 
 @Injectable()
@@ -24,10 +29,22 @@ export class S3Service {
     });
   }
 
+  get bucketName(): string {
+    return this.configService.get('S3_BUCKET_NAME')!;
+  }
+
+  get endpoint(): string {
+    return this.configService.get('S3_ENDPOINT')!;
+  }
+
+  buildUrl(key: string): string {
+    return `${this.endpoint}/${this.bucketName}/${key}`;
+  }
+
   async deleteFile(key: string) {
     try {
       const command = new DeleteObjectCommand({
-        Bucket: this.configService.get('S3_BUCKET_NAME'),
+        Bucket: this.bucketName,
         Key: key,
       });
 
@@ -53,7 +70,7 @@ export class S3Service {
     const key = `${folder}/${randomUUID()}.${fileExtension}`;
 
     const command = new PutObjectCommand({
-      Bucket: this.configService.get('S3_BUCKET_NAME'),
+      Bucket: this.bucketName,
       Key: key,
       Body: file.buffer,
       ContentType: file.mimetype,
@@ -64,7 +81,46 @@ export class S3Service {
 
     return {
       key,
-      url: `${this.configService.get('S3_ENDPOINT')}/${this.configService.get('S3_BUCKET_NAME')}/${key}`,
+      url: this.buildUrl(key),
     };
   }
+
+  async downloadToFile(key: string, destPath: string): Promise<void> {
+    const command = new GetObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+    });
+
+    const response = await this.s3.send(command);
+
+    if (!response.Body) {
+      throw new Error(`Empty response body for key: ${key}`);
+    }
+
+    await pipeline(response.Body as Readable, createWriteStream(destPath));
+  }
+
+  async uploadFromPath(
+    filePath: string,
+    key: string,
+    contentType: string,
+  ): Promise<{ key: string; url: string }> {
+    const body = await readFile(filePath);
+
+    const command = new PutObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+      Body: body,
+      ContentType: contentType,
+      ACL: 'public-read',
+    });
+
+    await this.s3.send(command);
+
+    return {
+      key,
+      url: this.buildUrl(key),
+    };
+  }
+
 }

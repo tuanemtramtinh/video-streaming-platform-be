@@ -5,6 +5,7 @@ import {
   DeleteLessonResSchema,
   LessonWithPaginationSchema,
   LessonWithRelationSchema,
+  ProcessVideoResSchema,
   UpdateLessonBodySchema,
 } from 'src/routes/lessons/lessons.model';
 
@@ -21,3 +22,5 @@ export class LessonWithPaginationDTO extends createZodDto(
 export class UpdateLessonBodyDTO extends createZodDto(UpdateLessonBodySchema) {}
 
 export class DeleteLessonResDTO extends createZodDto(DeleteLessonResSchema) {}
+
+export class ProcessVideoResDTO extends createZodDto(ProcessVideoResSchema) {}

@@ -7,6 +7,14 @@ export type LessonStatusType = z.infer<typeof LessonStatusSchema>;
 export const LessonTypeSchema = z.enum(['video', 'document', 'quiz']);
 export type LessonTypeType = z.infer<typeof LessonTypeSchema>;
 
+export const VideoStatusSchema = z.enum([
+  'pending',
+  'processing',
+  'ready',
+  'failed',
+]);
+export type VideoStatusType = z.infer<typeof VideoStatusSchema>;
+
 export const LessonSchema = z.object({
   id: z.number(),
   sectionId: z.coerce.number(),
@@ -29,6 +37,7 @@ export const LessonSchema = z.object({
     .int()
     .positive('Order index must be greater than 0'),
   status: LessonStatusSchema,
+  videoStatus: VideoStatusSchema,
 });
 
 export type LessonType = z.infer<typeof LessonSchema>;
@@ -73,6 +82,7 @@ export type LessonPaginationQueryType = z.infer<
 export const CreateLessonSchema = LessonSchema.omit({
   id: true,
   status: true,
+  videoStatus: true,
 }).extend({
   status: LessonStatusSchema.default('active'),
   contentUrl: z
@@ -110,3 +120,11 @@ export const DeleteLessonResSchema = z.object({
 });
 
 export type DeleteLessonResType = z.infer<typeof DeleteLessonResSchema>;
+
+export const ProcessVideoResSchema = z.object({
+  message: z.string(),
+  lessonId: z.number(),
+  videoStatus: VideoStatusSchema,
+});
+
+export type ProcessVideoResType = z.infer<typeof ProcessVideoResSchema>;

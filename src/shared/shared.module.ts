@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { UserRepository } from 'src/routes/users/user.repo';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { VideoProcessingQueueService } from 'src/shared/queues/video-processing.queue';
 import { HashingService } from 'src/shared/services/hashing.service';
 import { PrismaService } from 'src/shared/services/prisma.service';
 import { S3Service } from 'src/shared/services/s3.service';
@@ -13,6 +14,7 @@ const sharedServices = [
   TokenService,
   S3Service,
   AuthGuard,
+  VideoProcessingQueueService,
 ];
 
 @Global()

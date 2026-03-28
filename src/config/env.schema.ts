@@ -12,6 +12,9 @@ export const ConfigSchema = z.object({
   S3_SECRET_KEY: z.string(),
   S3_ENDPOINT: z.string(),
   S3_BUCKET_NAME: z.string(),
+  REDIS_HOST: z.string().default('localhost'),
+  REDIS_PORT: z.coerce.number().default(6379),
+  REDIS_PASSWORD: z.string().optional(),
 });
 
 export type Config = z.infer<typeof ConfigSchema>;

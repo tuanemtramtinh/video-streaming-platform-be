@@ -5,9 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider     = "prisma-client"
-  output       = "../src/generated/prisma"
-  moduleFormat = "cjs"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -34,6 +32,13 @@ enum SectionStatus {
 enum LessonStatus {
   active
   inactive
+}
+
+enum VideoStatus {
+  pending
+  processing
+  ready
+  failed
 }
 
 enum LessonType {
@@ -160,6 +165,7 @@ model Lesson {
   lessonType  LessonType
   orderIndex  Int
   status      LessonStatus @default(active)
+  videoStatus      VideoStatus @default(pending)
 
   section         Section          @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   lessonResources LessonResource[]
