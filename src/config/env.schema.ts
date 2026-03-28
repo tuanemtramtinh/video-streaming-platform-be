@@ -14,6 +14,7 @@ export const ConfigSchema = z.object({
   S3_BUCKET_NAME: z.string(),
   REDIS_HOST: z.string().default('localhost'),
   REDIS_PORT: z.coerce.number().default(6379),
+  REDIS_USERNAME: z.string().optional(),
   REDIS_PASSWORD: z.string().optional(),
 });
 

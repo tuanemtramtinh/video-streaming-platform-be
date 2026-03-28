@@ -100,7 +100,6 @@ export class LessonsController {
     return this.lessonsService.processVideo(
       lessonId,
       request[REQUEST_USER_KEY].id,
-      undefined,
     );
   }
 }
