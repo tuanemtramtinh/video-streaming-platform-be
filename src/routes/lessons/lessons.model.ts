@@ -100,15 +100,16 @@ export type CreateLessonResType = z.infer<typeof CreateLessonResSchema>;
 
 export const UpdateLessonBodySchema = LessonSchema.pick({
   title: true,
-  contentUrl: true,
   contentText: true,
   lessonType: true,
   orderIndex: true,
   status: true,
   sectionId: true,
 })
+  .extend({
+    contentUrl: z.url('Invalid content url').or(z.literal('')).optional(),
+  })
   .partial()
-  .strict()
   .refine((data) => Object.keys(data).length > 0, {
     message: 'At least one field must be provided',
   });

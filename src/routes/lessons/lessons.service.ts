@@ -15,13 +15,6 @@ import { LessonPaginationQueryType } from 'src/routes/lessons/lessons.model';
 import { VideoProcessingQueueService } from 'src/shared/queues/video-processing.queue';
 import { randomUUID } from 'node:crypto';
 import { S3Service } from 'src/shared/services/s3.service';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import {
-  CreateMultipartUploadCommand,
-  UploadPartCommand,
-  CompleteMultipartUploadCommand,
-  S3Client,
-} from '@aws-sdk/client-s3';
 
 @Injectable()
 export class LessonsService {
@@ -193,109 +186,42 @@ export class LessonsService {
     }
   }
 
-  async startMultipartUpload(
-    lessonId: number,
-    userId: number,
-    fileName: string,
-    fileType: string,
-    totalParts: number,
-  ) {
-    const lesson = await this.lessonsRepository.findById(lessonId);
-    if (!lesson) {
-      throw new NotFoundException('Lesson is not found');
-    }
-    if (lesson.section.course.instructorId !== userId) {
-      throw new ForbiddenException(
-        'You do not have permission to upload video for this lesson',
-      );
-    }
-
-    const bucketName = this.configService.get('S3_BUCKET_NAME');
+  async startMultipartUpload(fileName: string, fileType: string) {
     const fileExtension = fileName.split('.').pop();
     const videoKey = `videos/raw/${Date.now()}-${randomUUID()}.${fileExtension}`;
-
-    const createCommand = new CreateMultipartUploadCommand({
-      Bucket: bucketName,
-      Key: videoKey,
-      ContentType: fileType,
-    });
-    const { UploadId } = await (this.s3Service as any).s3.send(createCommand);
-    const tempS3Client = new S3Client({
-      region: this.configService.get('S3_REGION'),
-      endpoint: this.configService.get('S3_ENDPOINT'),
-      credentials: {
-        accessKeyId: this.configService.get('S3_ACCESS_KEY')!,
-        secretAccessKey: this.configService.get('S3_SECRET_KEY')!,
-      },
-      forcePathStyle: true,
-      requestChecksumCalculation: 'WHEN_REQUIRED',
-    } as any);
-
-    const presignedUrls: { partNumber: number; url: string }[] = [];
-
-    for (let i = 1; i <= totalParts; i++) {
-      const partCommand = new UploadPartCommand({
-        Bucket: bucketName,
-        Key: videoKey,
-        UploadId: UploadId,
-        PartNumber: i,
-      });
-
-      const url = await getSignedUrl(tempS3Client, partCommand, {
-        expiresIn: 3600,
-      });
-
-      presignedUrls.push({ partNumber: i, url });
-    }
-
-    return {
-      uploadId: UploadId,
+    const uploadId = await this.s3Service.createMultipartUpload(
       videoKey,
-      urls: presignedUrls,
-    };
-  }
-
-  async completeMultipartUpload(
-    lessonId: number,
-    userId: number,
-    data: {
-      uploadId: string;
-      videoKey: string;
-      parts: { ETag: string; PartNumber: number }[];
-    },
-  ) {
-    const lesson = await this.lessonsRepository.findById(lessonId);
-    if (!lesson) {
-      throw new NotFoundException('Lesson is not found');
-    }
-    if (lesson.section.course.instructorId !== userId) {
-      throw new ForbiddenException(
-        'You do not have permission to complete upload for this lesson',
-      );
-    }
-
-    const bucketName = this.configService.get('S3_BUCKET_NAME');
-    const completeCommand = new CompleteMultipartUploadCommand({
-      Bucket: bucketName,
-      Key: data.videoKey,
-      UploadId: data.uploadId,
-      MultipartUpload: {
-        Parts: data.parts.sort((a, b) => a.PartNumber - b.PartNumber),
-      },
-    });
-
-    await (this.s3Service as any).s3.send(completeCommand);
-    const videoUrl = this.s3Service.buildUrl(data.videoKey);
-    await this.lessonsRepository.updateContentUrlAndVideoStatus(
-      lessonId,
-      videoUrl,
-      'pending',
+      fileType,
     );
 
-    return {
-      message: 'Video uploaded successfully. Ready for processing.',
-      lessonId,
-      videoStatus: 'pending' as const,
-    };
+    return { uploadId, videoKey };
+  }
+
+  async signPart(data: {
+    uploadId: string;
+    videoKey: string;
+    partNumber: number;
+  }) {
+    const url = await this.s3Service.signUploadPart(
+      data.videoKey,
+      data.uploadId,
+      data.partNumber,
+    );
+
+    return { url };
+  }
+
+  async completeMultipartUpload(data: {
+    uploadId: string;
+    videoKey: string;
+    parts: { ETag: string; PartNumber: number }[];
+  }) {
+    await this.s3Service.completeMultipartUpload(
+      data.videoKey,
+      data.uploadId,
+      data.parts,
+    );
+
+    return { videoUrl: this.s3Service.buildUrl(data.videoKey) };
   }
 }

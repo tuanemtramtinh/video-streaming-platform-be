@@ -104,39 +104,37 @@ export class LessonsController {
   }
 
   @UseGuards(AuthGuard)
-  @Post(':lessonId/multipart-upload/start')
+  @Post('/multipart-upload/start')
   @HttpCode(200)
   async startMultipartUpload(
-    @Param('lessonId', ParseIntPipe) lessonId: number,
-    @Body() body: { fileName: string; fileType: string; totalParts: number },
-    @Req() request: RequestWithUser,
+    @Body() body: { fileName: string; fileType: string },
   ) {
     return this.lessonsService.startMultipartUpload(
-      lessonId,
-      request[REQUEST_USER_KEY].id,
       body.fileName,
       body.fileType,
-      body.totalParts,
     );
   }
 
   @UseGuards(AuthGuard)
-  @Post(':lessonId/multipart-upload/complete')
+  @Post('/multipart-upload/sign-part')
+  @HttpCode(200)
+  async signPart(
+    @Body() body: { uploadId: string; videoKey: string; partNumber: number },
+  ) {
+    return this.lessonsService.signPart(body);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('/multipart-upload/complete')
   @HttpCode(200)
   async completeMultipartUpload(
-    @Param('lessonId', ParseIntPipe) lessonId: number,
     @Body()
     body: {
       uploadId: string;
       videoKey: string;
       parts: { ETag: string; PartNumber: number }[];
     },
-    @Req() request: RequestWithUser,
   ) {
-    return this.lessonsService.completeMultipartUpload(
-      lessonId,
-      request[REQUEST_USER_KEY].id,
-      body,
-    );
+    return this.lessonsService.completeMultipartUpload(body);
   }
 }
