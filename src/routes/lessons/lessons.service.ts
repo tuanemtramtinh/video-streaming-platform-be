@@ -130,7 +130,7 @@ export class LessonsService {
     };
   }
 
-  async processVideo(lessonId: number, userId: number, _unused?: unknown) {
+  async processVideo(lessonId: number, userId: number) {
     const lesson = await this.lessonsRepository.findById(lessonId);
 
     if (!lesson) {
@@ -170,7 +170,7 @@ export class LessonsService {
       throw new BadRequestException('Lesson contentUrl is empty');
     }
 
-    const bucketName = this.configService.get('S3_BUCKET_NAME');
+    const bucketName = this.configService.get<string>('S3_BUCKET_NAME');
 
     try {
       const parsedUrl = new URL(contentUrl);

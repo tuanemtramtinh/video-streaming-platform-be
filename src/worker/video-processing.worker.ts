@@ -20,18 +20,17 @@ async function bootstrap() {
   const processor = app.get(VideoProcessingProcessor);
 
   const connection = {
-    host: configService.get('REDIS_HOST'),
-    port: configService.get('REDIS_PORT'),
-    password: configService.get('REDIS_PASSWORD') || undefined,
+    host: configService.get<string>('REDIS_HOST'),
+    port: Number(configService.get<string>('REDIS_PORT')),
+    password: configService.get<string>('REDIS_PASSWORD') || undefined,
+    username: configService.get<string>('REDIS_USERNAME') || undefined,
     maxRetriesPerRequest: null,
   };
 
   const worker = new Worker<VideoProcessingJobData>(
     VIDEO_PROCESSING_QUEUE,
     async (job: Job<VideoProcessingJobData>) => {
-      logger.log(
-        `Processing job ${job.id} for lesson ${job.data.lessonId}...`,
-      );
+      logger.log(`Processing job ${job.id} for lesson ${job.data.lessonId}...`);
       await processor.process(job.data);
       logger.log(`Job ${job.id} completed successfully`);
     },
@@ -70,8 +69,13 @@ async function bootstrap() {
     process.exit(0);
   };
 
-  process.on('SIGTERM', shutdown);
-  process.on('SIGINT', shutdown);
+  process.on('SIGTERM', () => {
+    void shutdown();
+  });
+
+  process.on('SIGINT', () => {
+    void shutdown();
+  });
 }
 
 bootstrap().catch((err) => {
