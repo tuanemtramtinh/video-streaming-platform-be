@@ -160,6 +160,19 @@ export class S3Service {
     return getSignedUrl(this.presignClient, command, { expiresIn: 3600 });
   }
 
+  async getPresignedUploadUrl(
+    key: string,
+    contentType: string,
+    expiresIn: number = 3600,
+  ): Promise<string> {
+    const command = new PutObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+      ContentType: contentType,
+    });
+    return getSignedUrl(this.presignClient, command, { expiresIn });
+  }
+
   async completeMultipartUpload(
     key: string,
     uploadId: string,

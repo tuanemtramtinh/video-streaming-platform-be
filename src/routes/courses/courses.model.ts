@@ -1,7 +1,7 @@
 import z from 'zod';
 import { PaginationInput } from 'src/shared/models/pagination.model';
-import { SectionSchema } from 'src/routes/sections/sections.model';
 import { LessonSchema } from 'src/routes/lessons/lessons.model';
+import { SectionSchema } from 'src/routes/sections/sections.model';
 
 export const CourseStatusSchema = z.enum(['active', 'inactive', 'draft']);
 export type CourseStatusType = z.infer<typeof CourseStatusSchema>;

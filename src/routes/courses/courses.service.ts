@@ -66,23 +66,21 @@ export class CoursesService {
 
   async getCourseById(courseId: number) {
     const course = await this.coursesRepository.findById(courseId);
-
     if (!course) {
       throw new NotFoundException('Course is not found');
     }
-
     return course;
   }
 
-  async getCourseDetailWithSectionsAndLessons(courseId: number) {
-    const course = await this.coursesRepository.findDetailById(courseId);
+  // async getCourseDetailWithSectionsAndLessons(courseId: number) {
+  //   const course = await this.coursesRepository.findDetailById(courseId);
 
-    if (!course) {
-      throw new NotFoundException('Course is not found');
-    }
+  //   if (!course) {
+  //     throw new NotFoundException('Course is not found');
+  //   }
 
-    return course;
-  }
+  //   return course;
+  // }
 
   async searchCourses(query: SearchCourseQueryType) {
     const { page, limit, name } = query;

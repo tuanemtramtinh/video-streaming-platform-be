@@ -4,7 +4,6 @@ import {
   CourseType,
   UpdateCourseBodyType,
   CourseWithRelationType,
-  CourseDetailWithSectionsAndLessonsType,
 } from 'src/routes/courses/courses.model';
 import { PrismaService } from 'src/shared/services/prisma.service';
 
@@ -79,37 +78,9 @@ export class CoursesRepository {
     return { data, meta: { total, page: safePage } };
   }
 
-  async findById(courseId: number): Promise<CourseWithRelationType | null> {
+  async findById(courseId: number) {
     return this.prismaService.course.findUnique({
-      where: {
-        id: courseId,
-      },
-      include: {
-        instructor: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-          },
-        },
-        category: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-    });
-  }
-
-  async findDetailById(
-    courseId: number,
-  ): Promise<CourseDetailWithSectionsAndLessonsType | null> {
-    return this.prismaService.course.findUnique({
-      where: {
-        id: courseId,
-      },
+      where: { id: courseId },
       include: {
         instructor: {
           select: {
@@ -136,6 +107,40 @@ export class CoursesRepository {
       },
     });
   }
+
+  // async findDetailById(
+  //   courseId: number,
+  // ): Promise<CourseDetailWithSectionsAndLessonsType | null> {
+  //   return this.prismaService.course.findUnique({
+  //     where: {
+  //       id: courseId,
+  //     },
+  //     include: {
+  //       instructor: {
+  //         select: {
+  //           id: true,
+  //           firstName: true,
+  //           lastName: true,
+  //           email: true,
+  //         },
+  //       },
+  //       category: {
+  //         select: {
+  //           id: true,
+  //           name: true,
+  //         },
+  //       },
+  //       sections: {
+  //         orderBy: { orderIndex: 'asc' },
+  //         include: {
+  //           lessons: {
+  //             orderBy: { orderIndex: 'asc' },
+  //           },
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
 
   async findByInstructorId(
     instructorId: number,

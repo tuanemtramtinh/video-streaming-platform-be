@@ -93,27 +93,6 @@ model RefreshToken {
   user User @relation(fields: [userId], references: [id])
 }
 
-// model Student {
-//   id Int @id @default(autoincrement())
-
-//   user        User         @relation(fields: [id], references: [id])
-//   enrollments Enrollment[]
-// }
-
-// model Teacher {
-//   id Int @id @default(autoincrement())
-
-//   user    User     @relation(fields: [id], references: [id])
-//   courses Course[]
-// }
-
-// model Admin {
-//   id Int @id @default(autoincrement())
-
-//   user       User       @relation(fields: [id], references: [id])
-//   categories Category[]
-// }
-
 model Category {
   id          Int     @id @default(autoincrement())
   creatorId   Int
@@ -143,6 +122,7 @@ model Course {
   category    Category     @relation(fields: [categoryId], references: [id])
   sections    Section[]
   enrollments Enrollment[]
+  resources   Resource[]
 }
 
 model Section {
@@ -165,7 +145,7 @@ model Lesson {
   lessonType  LessonType
   orderIndex  Int
   status      LessonStatus @default(active)
-  videoStatus      VideoStatus @default(pending)
+  videoStatus VideoStatus  @default(pending)
 
   section         Section          @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   lessonResources LessonResource[]
@@ -173,10 +153,13 @@ model Lesson {
 
 model Resource {
   id        Int      @id @default(autoincrement())
+  courseId  Int // ← thêm mới
   title     String
   fileUrl   String
   fileType  String
   createdAt DateTime @default(now())
+
+  course Course @relation(fields: [courseId], references: [id]) // ← thêm mới
 
   lessonResources LessonResource[]
 }

@@ -90,18 +90,18 @@ export class CoursesController {
     );
   }
 
-  @Get(':courseId/sections-lessons')
-  @HttpCode(200)
-  @ZodSerializerDto(CourseDetailResDTO)
-  getCourseDetailWithSectionsAndLessons(
-    @Param('courseId', ParseIntPipe) courseId: number,
-  ) {
-    return this.coursesService.getCourseDetailWithSectionsAndLessons(courseId);
-  }
+  // @Get(':courseId/sections-lessons')
+  // @HttpCode(200)
+  // @ZodSerializerDto(CourseDetailResDTO)
+  // getCourseDetailWithSectionsAndLessons(
+  //   @Param('courseId', ParseIntPipe) courseId: number,
+  // ) {
+  //   return this.coursesService.getCourseDetailWithSectionsAndLessons(courseId);
+  // }
 
   @Get(':courseId')
   @HttpCode(200)
-  @ZodSerializerDto(CourseResDTO)
+  @ZodSerializerDto(CourseDetailResDTO)
   getCourseById(@Param('courseId', ParseIntPipe) courseId: number) {
     return this.coursesService.getCourseById(courseId);
   }
