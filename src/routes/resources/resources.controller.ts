@@ -57,6 +57,13 @@ export class ResourcesController {
     return this.resourceService.updateResource(resourceId, body);
   }
 
+  @Get('lessons/:lessonId')
+  async getAllResourcesByLessonId(
+    @Param('lessonId', ParseIntPipe) lessonId: number,
+  ) {
+    return this.resourceService.getAllResourcesByLessonId(lessonId);
+  }
+
   @Get('/courses/:courseId')
   async getAllResources(
     @Param('courseId', ParseIntPipe) courseId: number,

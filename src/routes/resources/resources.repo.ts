@@ -44,6 +44,14 @@ export class ResourcesRepo {
     return result;
   }
 
+  async findResourcesByLessonId(lessonId: number) {
+    const result = await this.prismaService.lessonResource.findMany({
+      where: { lessonId },
+      include: { resource: true },
+    });
+    return result.map((lr) => lr.resource);
+  }
+
   findLessonResource(resourceId: number, lessonId: number) {
     return this.prismaService.lessonResource.findUnique({
       where: { lessonId_resourceId: { lessonId, resourceId } },

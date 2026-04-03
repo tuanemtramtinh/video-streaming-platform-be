@@ -72,3 +72,4 @@ export const LessonsByResourceResSchema = z.array(LessonByResourceSchema);
 export type LessonsByResourceResType = z.infer<
   typeof LessonsByResourceResSchema
 >;
+

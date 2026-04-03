@@ -63,6 +63,14 @@ export class ResourcesService {
     return this.resourcesRepo.findLessonsByResourceId(resourceId);
   }
 
+  async getAllResourcesByLessonId(lessonId: number) {
+    const lesson = await this.resourcesRepo.findLessonById(lessonId);
+    if (!lesson) {
+      throw new NotFoundException('Lesson not found');
+    }
+    return this.resourcesRepo.findResourcesByLessonId(lessonId);
+  }
+
   async updateResource(resourceId: number, body: UpdateResourceDTO) {
     const resource = await this.resourcesRepo.findById(resourceId);
     if (!resource) {
