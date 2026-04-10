@@ -53,6 +53,7 @@ export class CoursesService {
     const { data, meta } = await this.coursesRepository.getAllCourses(
       page,
       limit,
+      userId ?? undefined,
     );
 
     const enrolledIds = userId

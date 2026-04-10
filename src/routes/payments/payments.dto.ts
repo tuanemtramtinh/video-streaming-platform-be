@@ -1,39 +1,39 @@
 import { createZodDto } from 'nestjs-zod';
 import {
-    CancelPaymentBodySchema,
-    ConfirmWebhookBodySchema,
-    ConfirmWebhookResSchema,
-    CreatePaymentBodySchema,
-    PaymentWebhookResSchema,
-    PaymentWithCourseSchema,
-    PaymentWithPaginationSchema,
-    PayOSWebhookBodySchema,
+  CancelPaymentBodySchema,
+  ConfirmWebhookBodySchema,
+  ConfirmWebhookResSchema,
+  CreatePaymentBodySchema,
+  PaymentWebhookResSchema,
+  PaymentWithCourseSchema,
+  PaymentWithPaginationSchema,
+  PayOSWebhookBodySchema,
 } from 'src/routes/payments/payments.model';
 
 export class CreatePaymentBodyDTO extends createZodDto(
-    CreatePaymentBodySchema,
-) { }
+  CreatePaymentBodySchema,
+) {}
 
 export class CancelPaymentBodyDTO extends createZodDto(
-    CancelPaymentBodySchema,
-) { }
+  CancelPaymentBodySchema,
+) {}
 
-export class PaymentResDTO extends createZodDto(PaymentWithCourseSchema) { }
+export class PaymentResDTO extends createZodDto(PaymentWithCourseSchema) {}
 
 export class PaymentWithPaginationDTO extends createZodDto(
-    PaymentWithPaginationSchema,
-) { }
+  PaymentWithPaginationSchema,
+) {}
 
-export class PayOSWebhookBodyDTO extends createZodDto(PayOSWebhookBodySchema) { }
+export class PayOSWebhookBodyDTO extends createZodDto(PayOSWebhookBodySchema) {}
 
 export class PaymentWebhookResDTO extends createZodDto(
-    PaymentWebhookResSchema,
-) { }
+  PaymentWebhookResSchema,
+) {}
 
 export class ConfirmWebhookBodyDTO extends createZodDto(
-    ConfirmWebhookBodySchema,
-) { }
+  ConfirmWebhookBodySchema,
+) {}
 
 export class ConfirmWebhookResDTO extends createZodDto(
-    ConfirmWebhookResSchema,
-) { }
+  ConfirmWebhookResSchema,
+) {}

@@ -6,7 +6,12 @@ import { PayOSService } from 'src/routes/payments/payos.service';
 import { UserRepository } from 'src/routes/users/user.repo';
 
 @Module({
-    controllers: [PaymentsController],
-    providers: [PaymentsService, PaymentsRepository, PayOSService, UserRepository],
+  controllers: [PaymentsController],
+  providers: [
+    PaymentsService,
+    PaymentsRepository,
+    PayOSService,
+    UserRepository,
+  ],
 })
-export class PaymentsModule { }
+export class PaymentsModule {}

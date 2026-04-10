@@ -48,14 +48,19 @@ export class CoursesRepository {
     });
   }
 
-  async getAllCourses(page: number = 1, limit: number = 10) {
+  async getAllCourses(page: number = 1, limit: number = 10, excludeInstructorId?: number) {
     const safePage = Math.max(1, page);
     const skip = (safePage - 1) * limit;
+
+    const whereClause = excludeInstructorId
+      ? { NOT: { instructorId: excludeInstructorId } }
+      : {};
 
     const [data, total] = await Promise.all([
       this.prismaService.course.findMany({
         skip,
         take: limit,
+        where: whereClause,
         orderBy: { createdAt: 'desc' },
         include: {
           instructor: {
@@ -74,7 +79,7 @@ export class CoursesRepository {
           },
         },
       }),
-      this.prismaService.course.count(),
+      this.prismaService.course.count({ where: whereClause }),
     ]);
 
     return { data, meta: { total, page: safePage } };
