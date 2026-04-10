@@ -8,7 +8,10 @@ import {
   CreateCourseDTO,
   UpdateCourseBodyDTO,
 } from 'src/routes/courses/courses.dto';
-import { SearchCourseQueryType } from 'src/routes/courses/courses.model';
+import {
+  EnrollmentListQueryType,
+  SearchCourseQueryType,
+} from 'src/routes/courses/courses.model';
 import { CoursesRepository } from 'src/routes/courses/courses.repo';
 import { PaginationType } from 'src/shared/models/pagination.model';
 import { UserRepository } from 'src/routes/users/user.repo';
@@ -128,9 +131,56 @@ export class CoursesService {
       meta: {
         total: meta.total,
         page: meta.page,
-        lastPage: lastPage,
+        lastPage,
         hasNextPage: meta.page < lastPage,
         hasPrevPage: meta.page > 1,
+      },
+    };
+  }
+
+  async getEnrolledCourses(userId: number, pagination: PaginationType) {
+    const { page, limit } = pagination;
+    const { data, meta } = await this.coursesRepository.findEnrolledCourses(
+      userId,
+      page,
+      limit,
+    );
+    const lastPage = Math.ceil(meta.total / limit);
+
+    return {
+      data: data.map((course) => ({ ...course, isEnrolled: true as const })),
+      meta: {
+        ...meta,
+        lastPage,
+        hasNextPage: page < lastPage,
+        hasPrevPage: page > 1,
+      },
+    };
+  }
+
+  async getEnrollmentsByCourse(courseId: number, query: EnrollmentListQueryType) {
+    const course = await this.coursesRepository.findById(courseId);
+    if (!course) {
+      throw new NotFoundException('Course is not found');
+    }
+
+    const { page, limit, search, sortBy } = query;
+    const { data, meta } = await this.coursesRepository.findEnrollmentsByCourse(
+      courseId,
+      search,
+      page,
+      limit,
+      sortBy,
+    );
+    const lastPage = Math.ceil(meta.total / limit);
+
+    return {
+      data,
+      meta: {
+        ...meta,
+        lastPage,
+        hasNextPage: page < lastPage,
+        hasPrevPage: page > 1,
       },
     };
   }
@@ -197,5 +247,31 @@ export class CoursesService {
     return {
       message: 'Course deleted successfully',
     };
+  }
+
+  async studentEnrollCourse(courseId: number, userId: number) {
+    const [course, student] = await Promise.all([
+      this.coursesRepository.findById(courseId),
+      this.userRepository.findUserById(userId),
+    ]);
+
+    if (!course) {
+      throw new NotFoundException('Course is not found');
+    }
+    if (!student) {
+      throw new NotFoundException('Student is not found');
+    }
+
+    const existingEnrollment = await this.coursesRepository.findEnrollment(
+      courseId,
+      userId,
+    );
+    if (existingEnrollment) {
+      throw new UnprocessableEntityException(
+        'Student already enrolled in this course',
+      );
+    }
+
+    return this.coursesRepository.enrollStudent(courseId, userId);
   }
 }

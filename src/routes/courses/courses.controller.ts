@@ -23,6 +23,9 @@ import {
   UpdateCourseBodyDTO,
   CourseWithPaginationDTO,
   CourseDetailResDTO,
+  StudentEnrollCourseResDTO,
+  CourseWithIsEnrolledPaginationDTO,
+  EnrollmentListResDTO,
 } from 'src/routes/courses/courses.dto';
 import { CoursesService } from 'src/routes/courses/courses.service';
 import { REQUEST_USER_KEY } from 'src/shared/constants/auth.constant';
@@ -33,13 +36,17 @@ import {
   type PaginationInputType,
 } from 'src/shared/models/pagination.model';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { SearchCourseQuerySchema } from 'src/routes/courses/courses.model';
-import type { SearchCourseQueryType } from 'src/routes/courses/courses.model';
+import {
+  EnrollmentListQuerySchema,
+  SearchCourseQuerySchema,
+} from 'src/routes/courses/courses.model';
+import type {
+  EnrollmentListQueryType,
+  SearchCourseQueryType,
+} from 'src/routes/courses/courses.model';
 
 type RequestWithUser = Request & {
-  [REQUEST_USER_KEY]: {
-    id: number;
-  };
+  [REQUEST_USER_KEY]: { id: number };
 };
 
 @Controller('courses')
@@ -56,7 +63,6 @@ export class CoursesController {
     @Body() req: CreateCourseDTO,
     @Req() request: RequestWithUser,
   ) {
-    // console.log(file);
     return this.coursesService.create(file, req, request[REQUEST_USER_KEY].id);
   }
 
@@ -90,20 +96,38 @@ export class CoursesController {
     );
   }
 
-  // @Get(':courseId/sections-lessons')
-  // @HttpCode(200)
-  // @ZodSerializerDto(CourseDetailResDTO)
-  // getCourseDetailWithSectionsAndLessons(
-  //   @Param('courseId', ParseIntPipe) courseId: number,
-  // ) {
-  //   return this.coursesService.getCourseDetailWithSectionsAndLessons(courseId);
-  // }
+  @UseGuards(AuthGuard)
+  @Get('me/enrolled')
+  @HttpCode(200)
+  @ZodSerializerDto(CourseWithIsEnrolledPaginationDTO)
+  getEnrolledCourses(
+    @Query() query: PaginationInputType,
+    @Req() request: RequestWithUser,
+  ) {
+    const validatedPagination = PaginationSchema.parse(query);
+    return this.coursesService.getEnrolledCourses(
+      request[REQUEST_USER_KEY].id,
+      validatedPagination,
+    );
+  }
 
   @Get(':courseId')
   @HttpCode(200)
   @ZodSerializerDto(CourseDetailResDTO)
   getCourseById(@Param('courseId', ParseIntPipe) courseId: number) {
     return this.coursesService.getCourseById(courseId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get(':courseId/enrollments')
+  @HttpCode(200)
+  @ZodSerializerDto(EnrollmentListResDTO)
+  getEnrollmentsByCourse(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Query() query: EnrollmentListQueryType,
+  ) {
+    const validatedQuery = EnrollmentListQuerySchema.parse(query);
+    return this.coursesService.getEnrollmentsByCourse(courseId, validatedQuery);
   }
 
   @UseGuards(AuthGuard)
@@ -134,5 +158,19 @@ export class CoursesController {
     @Req() request: RequestWithUser,
   ) {
     return this.coursesService.delete(courseId, request[REQUEST_USER_KEY].id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post(':courseId/enroll')
+  @HttpCode(200)
+  @ZodSerializerDto(StudentEnrollCourseResDTO)
+  enroll(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Req() request: RequestWithUser,
+  ) {
+    return this.coursesService.studentEnrollCourse(
+      courseId,
+      request[REQUEST_USER_KEY].id,
+    );
   }
 }
