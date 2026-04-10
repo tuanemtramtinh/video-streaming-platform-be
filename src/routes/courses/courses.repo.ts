@@ -4,6 +4,8 @@ import {
   CourseType,
   UpdateCourseBodyType,
   CourseWithRelationType,
+  StudentEnrollCourseRelationType,
+  EnrollmentWithStudentType,
 } from 'src/routes/courses/courses.model';
 import { PrismaService } from 'src/shared/services/prisma.service';
 
@@ -258,6 +260,136 @@ export class CoursesRepository {
     return this.prismaService.course.delete({
       where: {
         id: courseId,
+      },
+    });
+  }
+
+  async findEnrolledCourseIds(userId: number): Promise<number[]> {
+    const enrollments = await this.prismaService.enrollment.findMany({
+      where: { userId },
+      select: { courseId: true },
+    });
+    return enrollments.map((e) => e.courseId);
+  }
+
+  async findEnrolledCourses(userId: number, page: number, limit: number) {
+    const safePage = Math.max(1, page);
+    const skip = (safePage - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.prismaService.course.findMany({
+        skip,
+        take: limit,
+        where: { enrollments: { some: { userId } } },
+        orderBy: { createdAt: 'desc' },
+        include: {
+          instructor: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+            },
+          },
+          category: { select: { id: true, name: true } },
+        },
+      }),
+      this.prismaService.course.count({
+        where: { enrollments: { some: { userId } } },
+      }),
+    ]);
+
+    return { data, meta: { total, page: safePage } };
+  }
+
+  async findEnrollmentsByCourse(
+    courseId: number,
+    search: string | undefined,
+    page: number,
+    limit: number,
+    sortBy: 'enrolledAt' | 'name',
+  ): Promise<{ data: EnrollmentWithStudentType[]; meta: { total: number; page: number } }> {
+    const safePage = Math.max(1, page);
+    const skip = (safePage - 1) * limit;
+
+    const whereClause = {
+      courseId,
+      ...(search
+        ? {
+            user: {
+              OR: [
+                { firstName: { contains: search, mode: 'insensitive' as const } },
+                { lastName: { contains: search, mode: 'insensitive' as const } },
+                { email: { contains: search, mode: 'insensitive' as const } },
+              ],
+            },
+          }
+        : {}),
+    };
+
+    const orderBy =
+      sortBy === 'name'
+        ? [{ user: { firstName: 'asc' as const } }]
+        : [{ enrolledAt: 'desc' as const }];
+
+    const [data, total] = await Promise.all([
+      this.prismaService.enrollment.findMany({
+        skip,
+        take: limit,
+        where: whereClause,
+        orderBy,
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+            },
+          },
+        },
+      }),
+      this.prismaService.enrollment.count({ where: whereClause }),
+    ]);
+
+    return { data, meta: { total, page: safePage } };
+  }
+
+  async findEnrollment(courseId: number, userId: number) {
+    return this.prismaService.enrollment.findUnique({
+      where: {
+        userId_courseId: { userId, courseId },
+      },
+    });
+  }
+
+  async enrollStudent(
+    courseId: number,
+    userId: number,
+  ): Promise<StudentEnrollCourseRelationType> {
+    return this.prismaService.enrollment.create({
+      data: {
+        courseId,
+        userId,
+      },
+      include: {
+        course: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            thumbnailUrl: true,
+            status: true,
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
       },
     });
   }

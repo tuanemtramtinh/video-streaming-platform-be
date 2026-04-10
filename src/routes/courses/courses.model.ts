@@ -122,3 +122,121 @@ export const DeleteCourseResSchema = z.object({
 });
 
 export type DeleteCourseResType = z.infer<typeof DeleteCourseResSchema>;
+
+export const CourseWithIsEnrolledSchema = CourseWithRelationSchema.extend({
+  isEnrolled: z.boolean(),
+});
+
+export type CourseWithIsEnrolledType = z.infer<typeof CourseWithIsEnrolledSchema>;
+
+export const CourseWithIsEnrolledPaginationSchema = z.object({
+  data: z.array(CourseWithIsEnrolledSchema),
+  meta: z.object({
+    total: z.number(),
+    page: z.number(),
+    lastPage: z.number(),
+    hasNextPage: z.boolean(),
+    hasPrevPage: z.boolean(),
+  }),
+});
+
+export type CourseWithIsEnrolledPaginationType = z.infer<
+  typeof CourseWithIsEnrolledPaginationSchema
+>;
+
+export const CourseDetailWithIsEnrolledSchema =
+  CourseDetailWithSectionsAndLessonsSchema.extend({
+    isEnrolled: z.boolean(),
+  });
+
+export type CourseDetailWithIsEnrolledType = z.infer<
+  typeof CourseDetailWithIsEnrolledSchema
+>;
+
+export const EnrollmentListQuerySchema = PaginationInput.extend({
+  search: z.string().trim().optional(),
+  sortBy: z.enum(['enrolledAt', 'name']).default('enrolledAt'),
+});
+
+export type EnrollmentListQueryType = z.infer<typeof EnrollmentListQuerySchema>;
+
+export const EnrollmentWithStudentSchema = z.object({
+  userId: z.number(),
+  courseId: z.number(),
+  enrolledAt: z.date(),
+  user: z.object({
+    id: z.number(),
+    firstName: z.string(),
+    lastName: z.string(),
+    email: z.string(),
+  }),
+});
+
+export type EnrollmentWithStudentType = z.infer<
+  typeof EnrollmentWithStudentSchema
+>;
+
+export const EnrollmentListResSchema = z.object({
+  data: z.array(EnrollmentWithStudentSchema),
+  meta: z.object({
+    total: z.number(),
+    page: z.number(),
+    lastPage: z.number(),
+    hasNextPage: z.boolean(),
+    hasPrevPage: z.boolean(),
+  }),
+});
+
+export type EnrollmentListResType = z.infer<typeof EnrollmentListResSchema>;
+
+export const StudentEnrollCourseSchema = z.object({
+  userId: z.coerce.number(),
+  courseId: z.coerce.number(),
+  enrolledAt: z.date(),
+});
+
+export type StudentEnrollCourseType = z.infer<typeof StudentEnrollCourseSchema>;
+
+export const StudentEnrollCourseRelationSchema =
+  StudentEnrollCourseSchema.extend({
+    course: z.object({
+      id: z.number(),
+      title: z.string(),
+      description: z.string(),
+      thumbnailUrl: z.string(),
+      status: CourseStatusSchema,
+    }),
+    user: z.object({
+      id: z.number(),
+      firstName: z.string(),
+      lastName: z.string(),
+      email: z.string(),
+    }),
+  });
+
+export type StudentEnrollCourseRelationType = z.infer<
+  typeof StudentEnrollCourseRelationSchema
+>;
+
+export const StudentEnrollCoursePaginationSchema = z.object({
+  data: z.array(StudentEnrollCourseRelationSchema),
+  meta: z.object({
+    total: z.number(),
+    page: z.number(),
+    lastPage: z.number(),
+    hasNextPage: z.boolean(),
+    hasPrevPage: z.boolean(),
+  }),
+});
+
+export type StudentEnrollCoursePaginationType = z.infer<
+  typeof StudentEnrollCoursePaginationSchema
+>;
+
+export const CreateStudentEnrollCouseSchema = StudentEnrollCourseSchema.omit({
+  enrolledAt: true,
+}).strict();
+
+export type CreateStudentEnrollCourseType = z.infer<
+  typeof CreateStudentEnrollCouseSchema
+>;
