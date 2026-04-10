@@ -41,6 +41,15 @@ enum VideoStatus {
   failed
 }
 
+enum PaymentStatus {
+  pending
+  processing
+  paid
+  cancelled
+  expired
+  failed
+}
+
 enum LessonType {
   video
   document
@@ -64,6 +73,7 @@ model User {
   enrollments   Enrollment[]
   categories    Category[]
   courses       Course[]
+  payments      Payment[]
 }
 
 model Role {
@@ -123,6 +133,7 @@ model Course {
   sections    Section[]
   enrollments Enrollment[]
   resources   Resource[]
+  payments    Payment[]
 }
 
 model Section {
@@ -172,6 +183,36 @@ model LessonResource {
   resource Resource @relation(fields: [resourceId], references: [id])
 
   @@id([lessonId, resourceId])
+}
+
+model Payment {
+  id              Int           @id @default(autoincrement())
+  orderCode       String        @unique
+  paymentLinkId   String?       @unique
+  userId          Int
+  courseId        Int
+  originalAmount  Int
+  finalAmount     Int
+  discountPercent Int           @default(0)
+  status          PaymentStatus @default(pending)
+  payosStatus     String?
+  checkoutUrl     String?
+  qrCode          String?
+  webhookData     Json?
+  failureReason   String?
+  expiredAt       DateTime?
+  paidAt          DateTime?
+  cancelledAt     DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([courseId])
+  @@index([status])
+  @@index([userId, courseId])
 }
 
 model Enrollment {
