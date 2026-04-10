@@ -22,7 +22,7 @@ import {
   DeleteCourseResDTO,
   UpdateCourseBodyDTO,
   CourseWithPaginationDTO,
-  CourseDetailResDTO,
+  CourseDetailWithIsEnrolledResDTO,
   StudentEnrollCourseResDTO,
   CourseWithIsEnrolledPaginationDTO,
   EnrollmentListResDTO,
@@ -30,6 +30,7 @@ import {
 import { CoursesService } from 'src/routes/courses/courses.service';
 import { REQUEST_USER_KEY } from 'src/shared/constants/auth.constant';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { OptionalAuthGuard } from 'src/shared/guards/optional-auth.guard';
 import { Request } from 'express';
 import {
   PaginationSchema,
@@ -66,12 +67,17 @@ export class CoursesController {
     return this.coursesService.create(file, req, request[REQUEST_USER_KEY].id);
   }
 
+  @UseGuards(OptionalAuthGuard)
   @Get()
   @HttpCode(200)
-  @ZodSerializerDto(CourseWithPaginationDTO)
-  getCourses(@Query() query: PaginationInputType) {
+  @ZodSerializerDto(CourseWithIsEnrolledPaginationDTO)
+  getCourses(
+    @Query() query: PaginationInputType,
+    @Req() request: RequestWithUser,
+  ) {
     const validatedPagination = PaginationSchema.parse(query);
-    return this.coursesService.getCourses(validatedPagination);
+    const userId = request[REQUEST_USER_KEY]?.id ?? null;
+    return this.coursesService.getCourses(validatedPagination, userId);
   }
 
   @Get('search')
@@ -111,11 +117,16 @@ export class CoursesController {
     );
   }
 
+  @UseGuards(OptionalAuthGuard)
   @Get(':courseId')
   @HttpCode(200)
-  @ZodSerializerDto(CourseDetailResDTO)
-  getCourseById(@Param('courseId', ParseIntPipe) courseId: number) {
-    return this.coursesService.getCourseById(courseId);
+  @ZodSerializerDto(CourseDetailWithIsEnrolledResDTO)
+  getCourseById(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Req() request: RequestWithUser,
+  ) {
+    const userId = request[REQUEST_USER_KEY]?.id ?? null;
+    return this.coursesService.getCourseById(courseId, userId);
   }
 
   @UseGuards(AuthGuard)

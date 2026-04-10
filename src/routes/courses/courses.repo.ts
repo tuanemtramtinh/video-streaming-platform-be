@@ -308,7 +308,10 @@ export class CoursesRepository {
     page: number,
     limit: number,
     sortBy: 'enrolledAt' | 'name',
-  ): Promise<{ data: EnrollmentWithStudentType[]; meta: { total: number; page: number } }> {
+  ): Promise<{
+    data: EnrollmentWithStudentType[];
+    meta: { total: number; page: number };
+  }> {
     const safePage = Math.max(1, page);
     const skip = (safePage - 1) * limit;
 
@@ -318,8 +321,12 @@ export class CoursesRepository {
         ? {
             user: {
               OR: [
-                { firstName: { contains: search, mode: 'insensitive' as const } },
-                { lastName: { contains: search, mode: 'insensitive' as const } },
+                {
+                  firstName: { contains: search, mode: 'insensitive' as const },
+                },
+                {
+                  lastName: { contains: search, mode: 'insensitive' as const },
+                },
                 { email: { contains: search, mode: 'insensitive' as const } },
               ],
             },

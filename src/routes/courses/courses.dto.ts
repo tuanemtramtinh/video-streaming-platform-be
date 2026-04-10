@@ -9,6 +9,7 @@ import {
   CourseDetailWithSectionsAndLessonsSchema,
   StudentEnrollCourseRelationSchema,
   CourseWithIsEnrolledPaginationSchema,
+  CourseDetailWithIsEnrolledSchema,
   EnrollmentListResSchema,
 } from 'src/routes/courses/courses.model';
 
@@ -24,6 +25,10 @@ export class CourseWithPaginationDTO extends createZodDto(
 
 export class CourseDetailResDTO extends createZodDto(
   CourseDetailWithSectionsAndLessonsSchema,
+) {}
+
+export class CourseDetailWithIsEnrolledResDTO extends createZodDto(
+  CourseDetailWithIsEnrolledSchema,
 ) {}
 
 export class CourseWithIsEnrolledPaginationDTO extends createZodDto(

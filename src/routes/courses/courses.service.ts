@@ -48,16 +48,24 @@ export class CoursesService {
     return this.coursesRepository.create(courses, userId, res.url);
   }
 
-  async getCourses(pagination: PaginationType) {
+  async getCourses(pagination: PaginationType, userId: number | null) {
     const { page, limit } = pagination;
     const { data, meta } = await this.coursesRepository.getAllCourses(
       page,
       limit,
     );
-    const lastPage = Math.ceil(meta.total / limit);
 
+    const enrolledIds = userId
+      ? await this.coursesRepository.findEnrolledCourseIds(userId)
+      : [];
+    const enrolledSet = new Set(enrolledIds);
+
+    const lastPage = Math.ceil(meta.total / limit);
     return {
-      data,
+      data: data.map((course) => ({
+        ...course,
+        isEnrolled: enrolledSet.has(course.id),
+      })),
       meta: {
         ...meta,
         lastPage,
@@ -67,12 +75,17 @@ export class CoursesService {
     };
   }
 
-  async getCourseById(courseId: number) {
+  async getCourseById(courseId: number, userId: number | null) {
     const course = await this.coursesRepository.findById(courseId);
     if (!course) {
       throw new NotFoundException('Course is not found');
     }
-    return course;
+
+    const enrollment = userId
+      ? await this.coursesRepository.findEnrollment(courseId, userId)
+      : null;
+
+    return { ...course, isEnrolled: enrollment !== null };
   }
 
   // async getCourseDetailWithSectionsAndLessons(courseId: number) {
@@ -158,7 +171,10 @@ export class CoursesService {
     };
   }
 
-  async getEnrollmentsByCourse(courseId: number, query: EnrollmentListQueryType) {
+  async getEnrollmentsByCourse(
+    courseId: number,
+    query: EnrollmentListQueryType,
+  ) {
     const course = await this.coursesRepository.findById(courseId);
     if (!course) {
       throw new NotFoundException('Course is not found');

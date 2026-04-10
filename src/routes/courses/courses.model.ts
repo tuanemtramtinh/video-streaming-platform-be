@@ -127,7 +127,9 @@ export const CourseWithIsEnrolledSchema = CourseWithRelationSchema.extend({
   isEnrolled: z.boolean(),
 });
 
-export type CourseWithIsEnrolledType = z.infer<typeof CourseWithIsEnrolledSchema>;
+export type CourseWithIsEnrolledType = z.infer<
+  typeof CourseWithIsEnrolledSchema
+>;
 
 export const CourseWithIsEnrolledPaginationSchema = z.object({
   data: z.array(CourseWithIsEnrolledSchema),
