@@ -63,7 +63,7 @@ export class VideoProcessingProcessor {
     private readonly s3Service: S3Service,
     private readonly lessonsRepository: LessonsRepository,
     private readonly configService: ConfigService<Config>,
-  ) {}
+  ) { }
 
   async process(jobData: VideoProcessingJobData): Promise<void> {
     const { lessonId, videoKey } = jobData;

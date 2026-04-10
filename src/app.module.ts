@@ -11,6 +11,7 @@ import { SectionsModule } from './routes/sections/sections.module';
 import { LessonsModule } from './routes/lessons/lessons.module';
 import { ResourcesModule } from './routes/resources/resources.module';
 import { CategoriesModule } from './routes/categories/categories.module';
+import { PaymentsModule } from './routes/payments/payments.module';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod';
 import { HttpExceptionFilter } from 'src/shared/filters/http-exception.filter';
@@ -31,6 +32,7 @@ import { HttpExceptionFilter } from 'src/shared/filters/http-exception.filter';
     LessonsModule,
     ResourcesModule,
     CategoriesModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -49,4 +51,4 @@ import { HttpExceptionFilter } from 'src/shared/filters/http-exception.filter';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }
