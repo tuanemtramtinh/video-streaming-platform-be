@@ -123,6 +123,14 @@ export const DeleteCourseResSchema = z.object({
 
 export type DeleteCourseResType = z.infer<typeof DeleteCourseResSchema>;
 
+export const RemoveWishlistCourseResSchema = z.object({
+  message: z.string(),
+});
+
+export type RemoveWishlistCourseResType = z.infer<
+  typeof RemoveWishlistCourseResSchema
+>;
+
 export const CourseWithIsEnrolledSchema = CourseWithRelationSchema.extend({
   isEnrolled: z.boolean(),
 });

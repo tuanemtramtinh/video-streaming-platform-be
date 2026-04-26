@@ -9,9 +9,15 @@ import {
 } from 'src/routes/courses/courses.model';
 import { PrismaService } from 'src/shared/services/prisma.service';
 
+type WishlistRecord = {
+  userId: number;
+  courseId: number;
+  createdAt: Date;
+};
+
 @Injectable()
 export class CoursesRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   async create(
     courses: CreateCourseType,
@@ -324,18 +330,18 @@ export class CoursesRepository {
       courseId,
       ...(search
         ? {
-            user: {
-              OR: [
-                {
-                  firstName: { contains: search, mode: 'insensitive' as const },
-                },
-                {
-                  lastName: { contains: search, mode: 'insensitive' as const },
-                },
-                { email: { contains: search, mode: 'insensitive' as const } },
-              ],
-            },
-          }
+          user: {
+            OR: [
+              {
+                firstName: { contains: search, mode: 'insensitive' as const },
+              },
+              {
+                lastName: { contains: search, mode: 'insensitive' as const },
+              },
+              { email: { contains: search, mode: 'insensitive' as const } },
+            ],
+          },
+        }
         : {}),
     };
 
@@ -404,5 +410,34 @@ export class CoursesRepository {
         },
       },
     });
+  }
+
+  async findWishlistByCourseAndUser(courseId: number, userId: number) {
+    const records = await this.prismaService.$queryRaw<WishlistRecord[]>`
+      SELECT "userId", "courseId", "createdAt"
+      FROM "Wishlist"
+      WHERE "courseId" = ${courseId} AND "userId" = ${userId}
+      LIMIT 1
+    `;
+
+    return records[0] ?? null;
+  }
+
+  async findAnyWishlistByCourse(courseId: number) {
+    const records = await this.prismaService.$queryRaw<WishlistRecord[]>`
+      SELECT "userId", "courseId", "createdAt"
+      FROM "Wishlist"
+      WHERE "courseId" = ${courseId}
+      LIMIT 1
+    `;
+
+    return records[0] ?? null;
+  }
+
+  async deleteWishlist(courseId: number, userId: number) {
+    return this.prismaService.$executeRaw`
+      DELETE FROM "Wishlist"
+      WHERE "courseId" = ${courseId} AND "userId" = ${userId}
+    `;
   }
 }

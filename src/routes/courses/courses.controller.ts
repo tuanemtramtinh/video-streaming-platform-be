@@ -26,6 +26,7 @@ import {
   StudentEnrollCourseResDTO,
   CourseWithIsEnrolledPaginationDTO,
   EnrollmentListResDTO,
+  RemoveWishlistCourseResDTO,
 } from 'src/routes/courses/courses.dto';
 import { CoursesService } from 'src/routes/courses/courses.service';
 import { REQUEST_USER_KEY } from 'src/shared/constants/auth.constant';
@@ -52,7 +53,7 @@ type RequestWithUser = Request & {
 
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly coursesService: CoursesService) {}
+  constructor(private readonly coursesService: CoursesService) { }
 
   @UseGuards(AuthGuard)
   @Post()
@@ -156,6 +157,20 @@ export class CoursesController {
       courseId,
       req,
       file,
+      request[REQUEST_USER_KEY].id,
+    );
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete(':courseId/wishlist')
+  @HttpCode(200)
+  @ZodSerializerDto(RemoveWishlistCourseResDTO)
+  removeFromWishlist(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Req() request: RequestWithUser,
+  ) {
+    return this.coursesService.removeCourseFromWishlist(
+      courseId,
       request[REQUEST_USER_KEY].id,
     );
   }

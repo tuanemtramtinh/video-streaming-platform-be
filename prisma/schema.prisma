@@ -71,6 +71,7 @@ model User {
   // admin        Admin?
   roles         UserRole[]
   enrollments   Enrollment[]
+  wishlists     Wishlist[]
   categories    Category[]
   courses       Course[]
   payments      Payment[]
@@ -132,8 +133,22 @@ model Course {
   category    Category     @relation(fields: [categoryId], references: [id])
   sections    Section[]
   enrollments Enrollment[]
+  wishlists   Wishlist[]
   resources   Resource[]
   payments    Payment[]
+}
+
+model Wishlist {
+  userId    Int
+  courseId  Int
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@id([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
 }
 
 model Section {

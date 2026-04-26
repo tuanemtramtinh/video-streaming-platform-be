@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { UserType } from 'src/routes/auth/auth.model';
 import { PrismaService } from 'src/shared/services/prisma.service';
+import type { UpdateProfileBodyType } from 'src/routes/users/users.model';
 
 @Injectable()
 export class UserRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) { }
 
   async findUserByEmail(
     email: string,
@@ -30,10 +31,10 @@ export class UserRepository {
       ...(includePassword
         ? {}
         : {
-            omit: {
-              password: true,
-            },
-          }),
+          omit: {
+            password: true,
+          },
+        }),
     });
   }
 
@@ -61,10 +62,30 @@ export class UserRepository {
       ...(includePassword
         ? {}
         : {
-            omit: {
-              password: true,
-            },
-          }),
+          omit: {
+            password: true,
+          },
+        }),
+    });
+  }
+
+  async updateProfileById(
+    id: number,
+    data: UpdateProfileBodyType,
+  ): Promise<Omit<UserType, 'password'>> {
+    return this.prismaService.user.update({
+      where: { id },
+      data,
+      include: {
+        roles: {
+          include: {
+            role: true,
+          },
+        },
+      },
+      omit: {
+        password: true,
+      },
     });
   }
 }
