@@ -131,6 +131,35 @@ export type RemoveWishlistCourseResType = z.infer<
   typeof RemoveWishlistCourseResSchema
 >;
 
+export const AddWishlistResSchema = z.object({
+  message: z.string(),
+  isWishlisted: z.boolean(),
+});
+
+export type AddWishlistResType = z.infer<typeof AddWishlistResSchema>;
+
+export const WishlistItemSchema = z.object({
+  userId: z.number(),
+  courseId: z.number(),
+  createdAt: z.date(),
+  course: CourseWithRelationSchema,
+});
+
+export type WishlistItemType = z.infer<typeof WishlistItemSchema>;
+
+export const WishlistPaginationSchema = z.object({
+  data: z.array(WishlistItemSchema),
+  meta: z.object({
+    total: z.number(),
+    page: z.number(),
+    lastPage: z.number(),
+    hasNextPage: z.boolean(),
+    hasPrevPage: z.boolean(),
+  }),
+});
+
+export type WishlistPaginationType = z.infer<typeof WishlistPaginationSchema>;
+
 export const CourseWithIsEnrolledSchema = CourseWithRelationSchema.extend({
   isEnrolled: z.boolean(),
 });

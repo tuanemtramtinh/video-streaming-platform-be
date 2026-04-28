@@ -4,6 +4,8 @@ import {
   CreateCourseResSchema,
   DeleteCourseResSchema,
   RemoveWishlistCourseResSchema,
+  AddWishlistResSchema,
+  WishlistPaginationSchema,
   UpdateCourseBodySchema,
   CourseWithRelationSchema,
   CourseWithPaginationSchema,
@@ -14,40 +16,46 @@ import {
   EnrollmentListResSchema,
 } from 'src/routes/courses/courses.model';
 
-export class CreateCourseDTO extends createZodDto(CreateCourseSchema) { }
+export class CreateCourseDTO extends createZodDto(CreateCourseSchema) {}
 
-export class CreateCourseResDTO extends createZodDto(CreateCourseResSchema) { }
+export class CreateCourseResDTO extends createZodDto(CreateCourseResSchema) {}
 
-export class CourseResDTO extends createZodDto(CourseWithRelationSchema) { }
+export class CourseResDTO extends createZodDto(CourseWithRelationSchema) {}
 
 export class CourseWithPaginationDTO extends createZodDto(
   CourseWithPaginationSchema,
-) { }
+) {}
 
 export class CourseDetailResDTO extends createZodDto(
   CourseDetailWithSectionsAndLessonsSchema,
-) { }
+) {}
 
 export class CourseDetailWithIsEnrolledResDTO extends createZodDto(
   CourseDetailWithIsEnrolledSchema,
-) { }
+) {}
 
 export class CourseWithIsEnrolledPaginationDTO extends createZodDto(
   CourseWithIsEnrolledPaginationSchema,
-) { }
+) {}
 
-export class UpdateCourseBodyDTO extends createZodDto(UpdateCourseBodySchema) { }
+export class UpdateCourseBodyDTO extends createZodDto(UpdateCourseBodySchema) {}
 
-export class DeleteCourseResDTO extends createZodDto(DeleteCourseResSchema) { }
+export class DeleteCourseResDTO extends createZodDto(DeleteCourseResSchema) {}
 
 export class RemoveWishlistCourseResDTO extends createZodDto(
   RemoveWishlistCourseResSchema,
-) { }
+) {}
+
+export class AddWishlistResDTO extends createZodDto(AddWishlistResSchema) {}
+
+export class WishlistPaginationDTO extends createZodDto(
+  WishlistPaginationSchema,
+) {}
 
 export class StudentEnrollCourseResDTO extends createZodDto(
   StudentEnrollCourseRelationSchema,
-) { }
+) {}
 
 export class EnrollmentListResDTO extends createZodDto(
   EnrollmentListResSchema,
-) { }
+) {}

@@ -9,11 +9,6 @@ import {
 } from 'src/routes/courses/courses.model';
 import { PrismaService } from 'src/shared/services/prisma.service';
 
-type WishlistRecord = {
-  userId: number;
-  courseId: number;
-  createdAt: Date;
-};
 
 @Injectable()
 export class CoursesRepository {
@@ -412,32 +407,59 @@ export class CoursesRepository {
     });
   }
 
-  async findWishlistByCourseAndUser(courseId: number, userId: number) {
-    const records = await this.prismaService.$queryRaw<WishlistRecord[]>`
-      SELECT "userId", "courseId", "createdAt"
-      FROM "Wishlist"
-      WHERE "courseId" = ${courseId} AND "userId" = ${userId}
-      LIMIT 1
-    `;
+  async addToWishlist(courseId: number, userId: number) {
+    return this.prismaService.wishlist.create({
+      data: { courseId, userId },
+    });
+  }
 
-    return records[0] ?? null;
+  async findWishlistByCourseAndUser(courseId: number, userId: number) {
+    return this.prismaService.wishlist.findUnique({
+      where: { userId_courseId: { userId, courseId } },
+    });
   }
 
   async findAnyWishlistByCourse(courseId: number) {
-    const records = await this.prismaService.$queryRaw<WishlistRecord[]>`
-      SELECT "userId", "courseId", "createdAt"
-      FROM "Wishlist"
-      WHERE "courseId" = ${courseId}
-      LIMIT 1
-    `;
-
-    return records[0] ?? null;
+    return this.prismaService.wishlist.findFirst({
+      where: { courseId },
+    });
   }
 
   async deleteWishlist(courseId: number, userId: number) {
-    return this.prismaService.$executeRaw`
-      DELETE FROM "Wishlist"
-      WHERE "courseId" = ${courseId} AND "userId" = ${userId}
-    `;
+    return this.prismaService.wishlist.delete({
+      where: { userId_courseId: { userId, courseId } },
+    });
+  }
+
+  async findUserWishlist(userId: number, page: number, limit: number) {
+    const safePage = Math.max(1, page);
+    const skip = (safePage - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.prismaService.wishlist.findMany({
+        where: { userId },
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          course: {
+            include: {
+              instructor: {
+                select: {
+                  id: true,
+                  firstName: true,
+                  lastName: true,
+                  email: true,
+                },
+              },
+              category: { select: { id: true, name: true } },
+            },
+          },
+        },
+      }),
+      this.prismaService.wishlist.count({ where: { userId } }),
+    ]);
+
+    return { data, meta: { total, page: safePage } };
   }
 }

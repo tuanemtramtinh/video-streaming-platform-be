@@ -292,6 +292,45 @@ export class CoursesService {
     return this.coursesRepository.enrollStudent(courseId, userId);
   }
 
+  async addCourseToWishlist(courseId: number, userId: number) {
+    const course = await this.coursesRepository.findById(courseId);
+    if (!course) {
+      throw new NotFoundException('Course is not found');
+    }
+
+    const existing = await this.coursesRepository.findWishlistByCourseAndUser(
+      courseId,
+      userId,
+    );
+    if (existing) {
+      await this.coursesRepository.deleteWishlist(courseId, userId);
+      return { message: 'Course removed from wishlist successfully', isWishlisted: false };
+    }
+
+    await this.coursesRepository.addToWishlist(courseId, userId);
+    return { message: 'Course added to wishlist successfully', isWishlisted: true };
+  }
+
+  async getUserWishlist(userId: number, pagination: PaginationType) {
+    const { page, limit } = pagination;
+    const { data, meta } = await this.coursesRepository.findUserWishlist(
+      userId,
+      page,
+      limit,
+    );
+    const lastPage = Math.ceil(meta.total / limit);
+
+    return {
+      data,
+      meta: {
+        ...meta,
+        lastPage,
+        hasNextPage: page < lastPage,
+        hasPrevPage: page > 1,
+      },
+    };
+  }
+
   async removeCourseFromWishlist(courseId: number, userId: number) {
     const course = await this.coursesRepository.findById(courseId);
 

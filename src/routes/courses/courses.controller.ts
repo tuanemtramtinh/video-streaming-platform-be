@@ -27,6 +27,8 @@ import {
   CourseWithIsEnrolledPaginationDTO,
   EnrollmentListResDTO,
   RemoveWishlistCourseResDTO,
+  AddWishlistResDTO,
+  WishlistPaginationDTO,
 } from 'src/routes/courses/courses.dto';
 import { CoursesService } from 'src/routes/courses/courses.service';
 import { REQUEST_USER_KEY } from 'src/shared/constants/auth.constant';
@@ -99,6 +101,21 @@ export class CoursesController {
     const validatedPagination = PaginationSchema.parse(query);
     return this.coursesService.getCoursesByInstructorId(
       instructorId,
+      validatedPagination,
+    );
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('me/wishlist')
+  @HttpCode(200)
+  @ZodSerializerDto(WishlistPaginationDTO)
+  getUserWishlist(
+    @Query() query: PaginationInputType,
+    @Req() request: RequestWithUser,
+  ) {
+    const validatedPagination = PaginationSchema.parse(query);
+    return this.coursesService.getUserWishlist(
+      request[REQUEST_USER_KEY].id,
       validatedPagination,
     );
   }
@@ -184,6 +201,20 @@ export class CoursesController {
     @Req() request: RequestWithUser,
   ) {
     return this.coursesService.delete(courseId, request[REQUEST_USER_KEY].id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post(':courseId/wishlist')
+  @HttpCode(200)
+  @ZodSerializerDto(AddWishlistResDTO)
+  addToWishlist(
+    @Param('courseId', ParseIntPipe) courseId: number,
+    @Req() request: RequestWithUser,
+  ) {
+    return this.coursesService.addCourseToWishlist(
+      courseId,
+      request[REQUEST_USER_KEY].id,
+    );
   }
 
   @UseGuards(AuthGuard)
