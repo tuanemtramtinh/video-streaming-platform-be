@@ -3,6 +3,9 @@ import {
   CreateCourseSchema,
   CreateCourseResSchema,
   DeleteCourseResSchema,
+  RemoveWishlistCourseResSchema,
+  AddWishlistResSchema,
+  WishlistPaginationSchema,
   UpdateCourseBodySchema,
   CourseWithRelationSchema,
   CourseWithPaginationSchema,
@@ -38,6 +41,16 @@ export class CourseWithIsEnrolledPaginationDTO extends createZodDto(
 export class UpdateCourseBodyDTO extends createZodDto(UpdateCourseBodySchema) {}
 
 export class DeleteCourseResDTO extends createZodDto(DeleteCourseResSchema) {}
+
+export class RemoveWishlistCourseResDTO extends createZodDto(
+  RemoveWishlistCourseResSchema,
+) {}
+
+export class AddWishlistResDTO extends createZodDto(AddWishlistResSchema) {}
+
+export class WishlistPaginationDTO extends createZodDto(
+  WishlistPaginationSchema,
+) {}
 
 export class StudentEnrollCourseResDTO extends createZodDto(
   StudentEnrollCourseRelationSchema,
