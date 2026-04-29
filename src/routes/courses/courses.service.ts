@@ -26,7 +26,7 @@ export class CoursesService {
     private readonly userRepository: UserRepository,
     private readonly s3Service: S3Service,
     private readonly configService: ConfigService<Config>,
-  ) { }
+  ) {}
 
   async create(
     file: Express.Multer.File,
@@ -304,11 +304,17 @@ export class CoursesService {
     );
     if (existing) {
       await this.coursesRepository.deleteWishlist(courseId, userId);
-      return { message: 'Course removed from wishlist successfully', isWishlisted: false };
+      return {
+        message: 'Course removed from wishlist successfully',
+        isWishlisted: false,
+      };
     }
 
     await this.coursesRepository.addToWishlist(courseId, userId);
-    return { message: 'Course added to wishlist successfully', isWishlisted: true };
+    return {
+      message: 'Course added to wishlist successfully',
+      isWishlisted: true,
+    };
   }
 
   async getUserWishlist(userId: number, pagination: PaginationType) {
@@ -338,10 +344,11 @@ export class CoursesService {
       throw new NotFoundException('Course is not found');
     }
 
-    const ownWishlist = await this.coursesRepository.findWishlistByCourseAndUser(
-      courseId,
-      userId,
-    );
+    const ownWishlist =
+      await this.coursesRepository.findWishlistByCourseAndUser(
+        courseId,
+        userId,
+      );
 
     if (!ownWishlist) {
       const existingWishlist =

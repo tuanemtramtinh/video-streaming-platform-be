@@ -55,7 +55,7 @@ type RequestWithUser = Request & {
 
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly coursesService: CoursesService) { }
+  constructor(private readonly coursesService: CoursesService) {}
 
   @UseGuards(AuthGuard)
   @Post()
